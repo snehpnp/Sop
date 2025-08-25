@@ -1,0 +1,31 @@
+.custom-tabs-newMarket {
+  width: 100%;
+  max-width: 600px;
+  /* Increase the width of the tabs */
+}
+
+.tab-title-newmarket {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  /* Prevent text from breaking into the next line */
+}
+
+.icon-newmarket {
+  font-size: 18px;
+  color: #1ccc8a;
+  /* Icon color */
+}
+
+/* .d-flex.align-items-center {
+  justify-content: center;  
+}  */
+
+/* Center the charting cards row and add gap between cards */
+.charting-row-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* gap: 24px;   */
+  gap: 0px;
+}

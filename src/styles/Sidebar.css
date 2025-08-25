@@ -1,0 +1,5 @@
+.scrollable-sidebar {
+  max-height: 100vh; /* Ensure it doesn't exceed the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-bottom: 20px; /* Add space at the bottom for scrolling */
+}

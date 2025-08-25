@@ -1,0 +1,149 @@
+.ocf-form {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.ocf-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.ocf-container-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Align items to the top */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.ocf-group {
+  flex: 1;
+  min-width: 200px; /* Ensure minimum width for each group */
+  max-width: 300px; /* Limit maximum width for better alignment */
+  display: flex;
+  flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+}
+
+.ocf-group label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px; /* Add spacing below the label */
+}
+
+.ocf-select {
+  font-size: 14px;
+  border-radius: 6px; /* Rounded corners for modern look */
+  padding: 8px; /* Increase padding for better usability */
+  width: 100%; /* Ensure inputs take full width of the group */
+  box-sizing: border-box; /* Include padding and border in width */
+}
+
+/* .ocf-control {
+  width: 97%; 
+  height: 38px;
+  border: 1px solid #ced4da;
+  padding: 8px; 
+  background-color: #fff;
+  color: #333;
+  border-radius: 6px;
+  box-sizing: border-box;
+} */
+
+.ocf-submit {
+  height: 38px;
+  padding: 0 15px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.ocf-submit:hover {
+  background-color: #0056b3;
+}
+
+.modern-table {
+border-collapse: collapse;
+width: 95%; /* Increased width to leave padding on sides */
+margin: 1rem auto; /* Added padding around the table */
+background-color: #f9f9f9;
+border: 1px solid #ddd;
+font-size: 12px; /* Reduced text size */
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modern-table th,
+.modern-table td {
+padding: 8px; /* Reduced padding for smaller row height */
+text-align: center;
+border: 1px solid #ddd;
+}
+
+.modern-table-header {
+background-color: #007bff;
+color: white;
+font-weight: bold;
+text-transform: uppercase;
+}
+
+.modern-table tr:nth-child(even) {
+background-color: #f2f2f2;
+}
+
+.modern-table tr:hover {
+background-color: #e9ecef;
+}
+
+.modern-table th {
+font-size: 14px; /* Slightly smaller heading text */
+letter-spacing: 0.5px;
+}
+
+.text-center {
+text-align: center;
+}
+
+.LivePirce_fontSize{
+  font-size:  20px;
+}
+
+.react-datepicker-wrapper {
+  width: 100%; /* Ensure date picker matches other inputs */
+}
+
+.react-datepicker__input-container input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #ced4da;
+  padding: 8px; /* Match padding with other inputs */
+  background-color: #fff;
+  color: #333;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box; /* Include padding and border in width */
+}
+
+.react-time-picker {
+  width: 100%; /* Ensure it matches other inputs */
+}
+
+.react-time-picker__wrapper {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 8px;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.react-time-picker__inputGroup__input {
+  height: 38px;
+  border: none;
+  font-size: 14px;
+  text-align: center;
+}

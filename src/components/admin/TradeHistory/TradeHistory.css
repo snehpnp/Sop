@@ -1,0 +1,262 @@
+Container & Card Styling
+.modern-container {
+    padding: 20px;
+}
+
+.modern-card-shadow {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.modern-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+}
+
+/* Form Elements */
+.modern-select,
+.modern-datepicker {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+/* Button Styling */
+.modern-btn-primary {
+    background: linear-gradient(135deg, #28a745, #218838);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.modern-btn-primary:hover {
+    opacity: 0.9;
+}
+
+/* Tab Navigation */
+.modern-nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 20px;
+}
+
+.modern-nav-link {
+    font-weight: 600;
+    color: #495057;
+    border: none;
+    border-radius: 0;
+    padding: 10px 15px;
+    transition: background 0.3s ease;
+}
+
+.modern-nav-link.active,
+.modern-nav-link:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+/* Tab Content */
+.modern-tab-content {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Section & Card Styling */
+.modern-section {
+    margin-top: 20px;
+}
+
+.modern-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.modern-card-header {
+    padding: 10px 15px;
+    font-weight: 600;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modern-card-body {
+    padding: 15px;
+}
+
+/* Loader */
+.modern-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+/* Modern Dropdown & DatePicker Styling */
+.modern-select {
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+    transition: border-color 0.3s ease;
+}
+
+.modern-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.modern-datepicker {
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease;
+}
+
+.modern-datepicker:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+/* Modern Submit Button */
+.modern-submit-btn {
+    background: linear-gradient(135deg, #28a745, #218838);
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.modern-submit-btn:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34);
+}
+
+/* Report Section Styles */
+.report-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.report-section-header {
+    background: #f8f9fa;
+    padding: 0.75rem 1.25rem;
+}
+
+.report-section-header h5 {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.report-load-btn {
+    background: linear-gradient(135deg, #007bff, #00aaff);
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.report-load-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+}
+
+.report-section-body {
+    padding: 1.25rem;
+}
+
+/* Additional spacing for form labels */
+.form-label {
+    font-weight: 600;
+    /* margin-bottom: 0.5rem; */
+}
+
+/* Modern Dropdown & DatePicker Styling */
+.modern-select {
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modern-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.modern-datepicker {
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modern-datepicker:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+/* Modern Submit Button */
+.modern-submit-btn {
+    background: linear-gradient(135deg, #28a745, #218838);
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.modern-submit-btn:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34);
+}
+
+/* Report Section Styles */
+.report-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.report-section-header {
+    background: #f8f9fa;
+    padding: 0.75rem 1.25rem;
+}
+
+.report-section-header h5 {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.report-load-btn {
+    background: linear-gradient(135deg, #007bff, #00aaff);
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.report-load-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+}
+
+.report-section-body {
+    padding: 1.25rem;
+}
+
+/* Additional Form Label Spacing */
+.form-label {
+    font-weight: 600;
+    /* margin-bottom: 0.5rem; */
+}

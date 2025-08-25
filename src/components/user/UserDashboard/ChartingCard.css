@@ -1,0 +1,108 @@
+.trade-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 15px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fdfdfd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.trade-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-header h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status.executed {
+  background-color: #d4fcdc;
+  color: #147c2e;
+}
+
+.status.not-executed {
+  background-color: #ffe5e5;
+  color: #b30000;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card-row div {
+  flex: 1;
+  min-width: 150px;
+  font-size: 15px;
+  color: #444;
+}
+
+strong {
+  color: #222;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  /* Reduced padding for smaller buttons */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  /* Reduced font size */
+  margin: 5px 0;
+  /* Added top and bottom margins */
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Removed hover effect */
+.pagination button:not(:disabled) {
+  background-color: #007bff;
+}
+
+.pagination span {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}

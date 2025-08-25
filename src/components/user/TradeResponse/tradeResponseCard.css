@@ -1,0 +1,116 @@
+/* tradeResponseCard.css */
+.response-card-container {
+    height: 100%;
+  }
+  
+  .response-card {
+    height: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .response-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .response-card-header {
+    background-color: #000;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .response-card-body {
+    padding: 15px;
+    height: calc(100% - 50px);
+    overflow-y: auto;
+  }
+  
+  .response-card-body p {
+    margin: 0 0 10px;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .response-card-body p span {
+    text-align: right;
+  }
+  
+  .response-card-section-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 15px 0 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    color: #333;
+  }
+  
+  /* Order Details Styles */
+  .order-details-container {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .order-details-column {
+    flex: 1;
+  }
+  
+  .order-details-divider {
+    width: 1px;
+    background-color: #ddd;
+    margin: 0 10px;
+  }
+  
+  .order-detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .order-detail-item strong {
+    color: #333;
+  }
+  
+  /* Response List Styles */
+  .response-card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .response-card-list li {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .response-card-list li strong {
+    color: #333;
+    margin-right: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .response-card {
+      margin-bottom: 15px;
+    }
+    
+    .order-details-container {
+      flex-direction: column;
+    }
+    
+    .order-details-divider {
+      width: 100%;
+      height: 1px;
+      margin: 10px 0;
+    }
+  }

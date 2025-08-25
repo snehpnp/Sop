@@ -1,0 +1,432 @@
+ 
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #7367f0;
+  border: none;
+}
+
+.strategy-image {
+  display: block;
+  margin-top: 10px;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.allStrategy-header {
+  margin-bottom: 20px;
+}
+
+.allStrategy-table-container {
+  overflow-x: auto;
+}
+
+.allStrategy-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.allStrategy-table th,
+.allStrategy-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.allStrategy-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.allStrategy-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.allStrategy-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.allStrategy-edit-btn,
+.allStrategy-delete-btn {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.allStrategy-edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.allStrategy-delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.allStrategy-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  /* Adjust spacing between cards */
+  margin-top: 20px;
+}
+
+.allStrategy-card {
+  display: flex;
+  /* Flexbox for left-right layout */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  /* Full width for each card */
+  max-width: 600px;
+  /* Limit the card width */
+  margin: 10px auto;
+  /* Center the card */
+  transition: transform 0.2s ease-in-out;
+}
+
+.allStrategy-card:hover {
+  transform: translateY(-5px);
+}
+
+.allStrategy-card-image-container {
+  flex: 1;
+  /* Take up 1/3 of the card width */
+  max-width: 200px;
+  /* Limit the image container width */
+  overflow: hidden;
+}
+
+.allStrategy-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.allStrategy-card-content {
+  flex: 2;
+  /* Take up 2/3 of the card width */
+  padding: 15px;
+}
+
+.allStrategy-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.allStrategy-card-indicator,
+.allStrategy-card-description {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.allStrategy-card-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* ___Allstg CSS______0 */
+
+/* Main container for all strategy cards */
+.strategy-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Individual strategy card */
+.strategy-card {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 200px;
+  /* Fixed height for consistency */
+}
+
+.strategy-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Image container on the left */
+.strategy-image-container {
+  flex: 0 0 200px;
+  height: 100%;
+}
+
+.strategy-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Ensure the entire image is visible */
+  display: block;
+}
+
+/* Content container on the right */
+.strategy-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.strategy-title {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  /* Darker color for emphasis */
+  font-size: 1.6rem;
+  /* Increased font size */
+  font-weight: bold;
+  /* Make it bold */
+  text-transform: uppercase;
+  /* Optional: Make it uppercase for more emphasis */
+}
+
+.strategy-indicator {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.strategy-description {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Add button styling */
+.addbtn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.addbtn:hover {
+  background-color: #45a049;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .strategy-container {
+    grid-template-columns: 1fr;
+  }
+
+  .strategy-card {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .strategy-image-container {
+    flex: 0 0 150px;
+    width: 100%;
+  }
+}
+
+.strategy-label {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.strategy-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.strategy-label {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666;
+  margin-right: 10px;
+  min-width: 120px;
+  /* Ensure labels align properly */
+}
+
+.strategy-value {
+  font-size: 0.95rem;
+  color: #333;
+  flex: 1;
+  /* Allow the value to take up remaining space */
+}
+
+/* Scrollable description for long text, styled with Bootstrap look */
+.description-scrollable {
+  max-height: 120px;
+  overflow-y: auto;
+  white-space: pre-line;
+  font-size: 1rem;
+  color: #333;
+  background: #f6f6f6;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .strategy-card-fullwidth {
+    flex-direction: column !important;
+  }
+
+  .strategy-img-container,
+  .strategy-content-container {
+    width: 100% !important;
+    min-height: 120px;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .strategy-content-container {
+    padding: 16px;
+  }
+}
+
+.strategy-card-fullwidth {
+  min-height: 200px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.strategy-img-container {
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border-right: 1px solid #eee;
+}
+
+.strategy-content-container {
+  padding: 24px 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* For Webkit browsers */
+.description-scrollable::-webkit-scrollbar {
+  width: 6px;
+  background: #e9ecef;
+}
+
+.description-scrollable::-webkit-scrollbar-thumb {
+  background: #adb5bd;
+  border-radius: 4px;
+}
+
+
+
+.edit-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--text-color);
+
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none !important;
+}
+
+.edit-svgIcon {
+  width: 17px;
+  transition-duration: 0.3s;
+}
+
+.edit-svgIcon path {
+  fill: var(--bg-color);
+}
+
+.edit-button:hover {
+  width: 120px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: var(--text-color);
+  align-items: center;
+}
+
+.edit-button:hover .edit-svgIcon {
+  width: 20px;
+  transition-duration: 0.3s;
+  transform: translateY(60%);
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+
+.edit-button::before {
+  display: none;
+  content: "Edit";
+  color: var(--bg-color);
+  transition-duration: 0.3s;
+  font-size: 2px;
+}
+
+.edit-button:hover::before {
+  display: block;
+  padding-right: 10px;
+  font-size: 13px;
+  opacity: 1;
+  transform: translateY(0px);
+  transition-duration: 0.3s;
+}
+
+.edit-button-wrapper {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 2;
+}
+
+
+/* _____________Add strategy page CSS______________ */
+
