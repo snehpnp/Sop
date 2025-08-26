@@ -498,7 +498,7 @@ const TradeResponse = () => {
                   {selectStrategyType === "ChartingPlatform" && (
                     <div className="container">
                       {/* Tab Navigation */}
-                      <div className="d-flex justify-content-start">
+                      <div className="d-flex justify-content-center">
                         <ul
                           className="nav nav-pills shadow rounded-pill p-1"
                           style={{ marginTop: "-40px" }}

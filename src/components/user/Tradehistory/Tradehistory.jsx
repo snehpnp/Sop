@@ -682,7 +682,7 @@ const Tradehistory = () => {
             </div>
             {/* Second Row: Strategy Type Options (Pill Buttons) */}
             <div className="col-12">
-              <div className="d-flex report-btns">
+              <div className="d-flex report-btns justify-content-center">
                 <ul className="nav nav-pills shadow rounded-pill p-1">
                   {strategyNames.map((type, index) => (
                     <li className="nav-item" key={index}>
@@ -712,7 +712,7 @@ const Tradehistory = () => {
             {/* Third Row: Segments (only if ChartingPlatform is selected) */}
             {selectStrategyType === "ChartingPlatform" && (
               <div className="col-12">
-                <div className="d-flex justify-content-start">
+                <div className="d-flex justify-content-center">
                   <ul className="nav nav-pills shadow rounded-pill p-1">
                     {chartingSegments.map((segment) => (
                       <li className="nav-item" key={segment}>

@@ -552,7 +552,7 @@ const TradeReport = () => {
   // Memoized render functions
   const renderStrategyButtons = useMemo(() => (
     <div className="col-12 col-md-12 col-lg-12 trade-report-btns">
-      <div className="d-flex report-btn">
+      <div className="d-flex report-btn justify-content-center">
         <ul className="nav nav-pills shadow rounded-pill p-1">
           {strategyNames.map((type, index) => (
             <li className="nav-item" key={index}>
@@ -584,7 +584,7 @@ const TradeReport = () => {
     return (
       <div className="row mb-2">
         <div className="col-12">
-          <div className="d-flex justify-content-start">
+          <div className="d-flex justify-content-center">
             <ul className="nav nav-pills shadow rounded-pill p-1">
               {chartingSegments.map((segment) => (
                 <li className="nav-item" key={segment}>

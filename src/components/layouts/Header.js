@@ -1439,12 +1439,12 @@ const Header = ({ permissionData }) => {
                     type="button"
                     className="btn border-0"
                     style={{
-                      width: "120px",
+                      width: "100px",
                       backgroundColor: getTradingStatus ? "#2a2e32" : "#7367f0",
                       color: getTradingStatus ? "#6c7293" : "white",
                       fontWeight: "500",
-                      padding: "6px 12px",
-                      fontSize: "13px",
+                      padding: "6px 0px",
+                      fontSize: "11px",
                       transition: "all 0.3s ease",
                       borderRadius: "18px",
                       boxShadow: getTradingStatus
@@ -1459,12 +1459,12 @@ const Header = ({ permissionData }) => {
                     type="button"
                     className="btn border-0"
                     style={{
-                      width: "120px",
+                      width: "100px",
                       backgroundColor: getTradingStatus ? "#7367f0" : "#2a2e32",
                       color: "white",
                       fontWeight: "500",
-                      padding: "6px 12px",
-                      fontSize: "13px",
+                      padding: "6px 0px",
+                      fontSize: "11px",
                       transition: "all 0.3s ease",
                       borderRadius: "18px",
                       boxShadow: getTradingStatus
