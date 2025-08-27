@@ -424,6 +424,42 @@ const TradeResponse = () => {
       <div className="iq-card-body">
         <div className="was-validated ">
           <div className="row g-3 mb-4">
+             <div className="col-12 col-md-12">
+              <div className="history-page-dates justify-content-center">
+                <div className="history-page-dates ">
+                  <div
+                    className={`form-group mb-2 ${
+                      selectStrategyType === "ChartingPlatform"
+                        ? "col-lg-6"
+                        : "col-lg-6"
+                    }`}
+                  >
+                    <label>Select From Date</label>
+                    <DatePicker
+                      className="form-select"
+                      selected={FromDate === "" ? formattedDate : FromDate}
+                      onChange={(date) => setFromDate(date)}
+                    />
+                  </div>
+
+                  {/* Select To Date */}
+                  <div
+                    className={`form-group mb-2 ${
+                      selectStrategyType === "ChartingPlatform"
+                        ? "col-lg-6"
+                        : "col-lg-6"
+                    }`}
+                  >
+                    <label>Select To Date</label>
+                    <DatePicker
+                      className="form-select"
+                      selected={ToDate === "" ? Defult_To_Date : ToDate}
+                      onChange={(date) => setToDate(date)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="col-12 col-md-12">
               <div className="d-flex  report-btns justify-content-center">
                 <ul className="nav nav-pills shadow rounded-pill p-1">
@@ -452,42 +488,7 @@ const TradeResponse = () => {
                 </ul>
               </div>
             </div>
-            <div className="col-12 col-md-12">
-              <div className="history-page-dates justify-content-center">
-                <div className="history-page-dates ">
-                  <div
-                    className={`form-group ${
-                      selectStrategyType === "ChartingPlatform"
-                        ? "col-lg-6"
-                        : "col-lg-6"
-                    }`}
-                  >
-                    <label>Select From Date</label>
-                    <DatePicker
-                      className="form-select"
-                      selected={FromDate === "" ? formattedDate : FromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                  </div>
-
-                  {/* Select To Date */}
-                  <div
-                    className={`form-group ${
-                      selectStrategyType === "ChartingPlatform"
-                        ? "col-lg-6"
-                        : "col-lg-6"
-                    }`}
-                  >
-                    <label>Select To Date</label>
-                    <DatePicker
-                      className="form-select"
-                      selected={ToDate === "" ? Defult_To_Date : ToDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+           
           </div>
 
           <div className="modal-body">
@@ -501,7 +502,7 @@ const TradeResponse = () => {
                       <div className="d-flex justify-content-center">
                         <ul
                           className="nav nav-pills shadow rounded-pill p-1"
-                          style={{ marginTop: "-40px" }}
+                          // style={{ marginTop: "-40px" }}
                         >
                           {getChartingSegments.map((segment) => (
                             <li className="nav-item" key={segment}>
