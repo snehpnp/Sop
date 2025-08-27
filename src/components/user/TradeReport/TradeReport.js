@@ -553,7 +553,7 @@ const TradeReport = () => {
   const renderStrategyButtons = useMemo(() => (
     <div className="col-12 col-md-12 col-lg-12 trade-report-btns">
       <div className="d-flex report-btn justify-content-center">
-        <ul className="nav nav-tabs justify-content-center border-bottom rounded-0 p-1 mb-5">
+        <ul className="nav nav-tabs justify-content-center border-bottom rounded-0 p-1 mb-3">
           {strategyNames.map((type, index) => (
             <li className="nav-item" key={index}>
               <a

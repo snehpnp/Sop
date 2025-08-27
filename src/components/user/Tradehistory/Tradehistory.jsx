@@ -638,7 +638,7 @@ const Tradehistory = () => {
             {/* Reduced mb-4 to mb-2 for less vertical gap */}
             {/* First Row: Strategy Tag, From Date, To Date */}
             <div className="col-12">
-              <div className="row align-items-end g-2">
+              <div className="row align-items-end g-2 justify-content-center">
                 {/* From Date */}
                 <div className="col-md-4 mb-2">
                   <label className="form-label">Select From Date</label>
