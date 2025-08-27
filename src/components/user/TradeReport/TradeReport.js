@@ -553,24 +553,20 @@ const TradeReport = () => {
   const renderStrategyButtons = useMemo(() => (
     <div className="col-12 col-md-12 col-lg-12 trade-report-btns">
       <div className="d-flex report-btn justify-content-center">
-        <ul className="nav nav-pills shadow rounded-pill p-1">
+        <ul className="nav nav-tabs justify-content-center border-bottom rounded-0 p-1 mb-5">
           {strategyNames.map((type, index) => (
             <li className="nav-item" key={index}>
-              <button
-                className={`nav-link ${
+              <a
+                className={`nav-link me-lg-5 ${
                   selectStrategyType === type ? "active" : ""
-                } rounded-pill`}
+                } `}
                 onClick={() => handleStrategyTypeChange(type)}
                 style={{
-                  padding: "6px 12px",
-                  margin: "4px",
-                  border: "none",
-                  outline: "none",
-                  fontSize: "0.95rem",
+                 
                 }}
               >
                 {type}
-              </button>
+              </a>
             </li>
           ))}
         </ul>
@@ -785,7 +781,11 @@ const TradeReport = () => {
         <div className="was-validated">
           <div className="row mb-4">
             <div className="col-12">
-              <div className="row align-items-end g-2">
+                {/* Second Row: Strategy Type Options (Pill Buttons) */}
+          <div className="row mb-2">
+            {renderStrategyButtons}
+          </div>
+              <div className="row align-items-end g-2 px-lg-5 justify-content-center">
 
                 
                 {/* From Date */}
@@ -815,14 +815,15 @@ const TradeReport = () => {
                   <div className="form-group col-lg-4 col-md-4 col-12">
                     <label
                       htmlFor="strategyTag"
-                      className="form-label"
-                      style={{ height: "44px" }}
+                      className="card-text-Color"
+                     
                     >
                       Strategy Tag
                     </label>
-                    <div className="relative">
+                    <div className="relative"  style={{ height: "44px" }}>
                       <Select
                         id="strategyTag"
+                      
                         classNamePrefix="react-select"
                         options={strategyTagSelectOptions}
                         value={{
@@ -846,10 +847,7 @@ const TradeReport = () => {
             </div>
           </div>
 
-          {/* Second Row: Strategy Type Options (Pill Buttons) */}
-          <div className="row mb-2">
-            {renderStrategyButtons}
-          </div>
+        
 
           {/* Third Row: Segments (only if ChartingPlatform is selected) */}
           {renderSegmentButtons}

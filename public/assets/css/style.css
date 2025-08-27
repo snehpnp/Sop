@@ -1935,6 +1935,7 @@ body.sidebar-main .iq-menu-bt {
 
 body.sidebar-main .iq-sidebar {
   width: 80px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 body.sidebar-main .iq-sidebar-menu .iq-menu li a .iq-arrow-right {
@@ -6709,10 +6710,6 @@ ul.breadcrumb-links li a {
 }
 
 
-button:hover {
-  scale: 1.1;
-  /* scale: 0.5; */
-}
 
 
 /* ______group css testing_________ */
