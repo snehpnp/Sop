@@ -150,8 +150,8 @@ const Tradehistory = () => {
       <div className="iq-card-body">
         <div className="was-validated ">
           <div className="row g-3 mb-4">
-            <div className="col-12 col-md-6 col-lg-8">
-              <div className="d-flex  report-btns">
+            <div className="col-12 col-md-12 col-lg-12">
+              <div className="d-flex  report-btns justify-content-center">
                 <ul
                   className="nav nav-pills shadow rounded-pill p-1"
                 >
@@ -177,8 +177,8 @@ const Tradehistory = () => {
                 </ul>
               </div>
             </div>
-            <div className="col-12 col-md-6 col-lg-4">
-              <div className="history-page-dates">
+            <div className="col-12 col-md-12 col-lg-12 mt-3">
+              <div className="history-page-dates  justify-content-center">
                 <div className="history-page-dates">
                   <div
                     className={`form-group ${selectStrategyType === "ChartingPlatform"

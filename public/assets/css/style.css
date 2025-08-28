@@ -1476,8 +1476,8 @@ body.sidebar-main .iq-sidebar:hover .iq-menu li.menu-open>a {
 }
 
 .navbar-list li>a>img {
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
 }
 
 .navbar-list li.iq-nav-user {
@@ -8805,7 +8805,7 @@ height: auto;
 
 .live-price-item {
   width: fit-content; /* ya fixed width like 120px */
-  margin-right: 8px;
+  /* margin-right: 8px; */
   padding: 4px 8px;
 }
 

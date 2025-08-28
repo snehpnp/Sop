@@ -1431,7 +1431,7 @@ const Header = ({ permissionData }) => {
                     backgroundColor: "#2a2e32",
                     borderRadius: "20px",
                     padding: "2px",
-                    height: "36px",
+                    height: "30px",
                     marginLeft: "0.2rem",
                   }}
                 >
@@ -1520,7 +1520,7 @@ const Header = ({ permissionData }) => {
                       </span>
                     </div>
                   </li>
-
+{/* 
                   <li
                     className="nav-item mx-3 btn-text-color"
                     onClick={toggleFundsVisibility}
@@ -1536,7 +1536,7 @@ const Header = ({ permissionData }) => {
                         </span>
                       </span>
                     </button>
-                  </li>
+                  </li> */}
 
                   {/* <li
                     className="nav-item iq-full-screen"
@@ -1702,7 +1702,26 @@ const Header = ({ permissionData }) => {
                               </div>
                             </div>
                           </Link>
-
+                          <Link
+                            to="/user/all/transection"
+                            className="iq-sub-card iq-bg-primary-hover text-decoration-none"
+                          >
+                            <div className="media align-items-center d-flex">
+                              <div className="rounded card-icon bg-soft-primary">
+                              <i class="ri-wallet-line"></i>
+                              </div>
+                              <div className="media-body ms-3">
+                                <h6 className="mb-0 ">My Funds</h6>
+                                <p className="mb-0 font-size-12 text-decoration-none">
+                                  View funding details.
+                                </p>
+                              </div>
+                            </div>
+         
+                    
+                    
+                 
+                          </Link>
                           <Link
                             to="/user/plans"
                             className="iq-sub-card iq-bg-primary-hover text-decoration-none"
