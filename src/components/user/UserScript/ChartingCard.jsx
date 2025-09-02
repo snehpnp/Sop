@@ -130,7 +130,7 @@ const ChartingCard = ({
     });
   }
 
-  const labelStyle = { color: "#ccc" };
+  const labelStyle = { color: "#ccc" ,fontSize: "0.9rem"};
 
   return (
     <div className="col-md-4 mb-3" style={{ maxWidth: "400px", minWidth: "300px" }}>

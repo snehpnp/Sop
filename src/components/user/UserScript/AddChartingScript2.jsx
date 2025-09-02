@@ -203,14 +203,20 @@ const AddChartingScript2 = () => {
       Page_title={"🖥️ Panel Track"}
       button_status={false}
       backbutton_status={false}>
+            <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+   
+    <li class="breadcrumb-item active" aria-current="page">
+
+            <i className="las la-arrow-left pe-2 "  onClick={() => navigate("/user/dashboard")} style={{ cursor: "pointer" }}></i>
+
+      Signals</li>
+  </ol>
+</nav>
       <div className="iq-card-body">
         <div className="d-flex justify-content-between align-items-center">
 
-          <button style={{ height: "32px", lineHeight: "16px" }}
-            className="btn btn-primary m-3"
-            onClick={() => navigate("/user/dashboard")}>
-            <i className="las la-arrow-left"></i> Back
-          </button>
+        
 
 
           <div className="d-flex" style={{ gap: "10px", flex: 1, justifyContent: "flex-end" }}>
@@ -267,9 +273,9 @@ const AddChartingScript2 = () => {
                 }}
               >
                 {/* Heading */}
-                <h4 className="m-0 card-text-Color" style={{ fontWeight: "600", flex: 1, minWidth: 120 }}>
+                {/* <h4 className="m-0 card-text-Color" style={{ fontWeight: "600", flex: 1, minWidth: 120 }}>
                   {"Signals"}
-                </h4>
+                </h4> */}
                 {/* Filter Controls Grid */}
                 <div
                   className="d-flex flex-wrap align-items-end"

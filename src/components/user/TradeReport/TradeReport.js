@@ -785,11 +785,11 @@ const TradeReport = () => {
           <div className="row mb-2">
             {renderStrategyButtons}
           </div>
-              <div className="row align-items-end g-2 px-lg-5 justify-content-center">
+              <div className="row align-items-start g-2 px-lg-5 justify-content-center card-bg-color">
 
                 
                 {/* From Date */}
-                <div className="form-group col-lg-4 col-md-4 col-12 z-3">
+                <div className=" col-lg-4 col-md-4 col-12 z-3 m-0">
                   <label className="card-text-Color">Select From Date</label>
                   <DatePicker
                     className="form-select"
@@ -800,7 +800,7 @@ const TradeReport = () => {
                 </div>
                 
                 {/* To Date */}
-                <div className="form-group col-lg-4 col-md-4 col-12 z-3">
+                <div className="col-lg-4 col-md-4 col-12 z-3 m-0">
                   <label className="card-text-Color">Select To Date</label>
                   <DatePicker
                     className="form-select"
@@ -812,7 +812,7 @@ const TradeReport = () => {
 
 
                 {selectStrategyType === "ChartingPlatform" && (
-                  <div className="form-group col-lg-4 col-md-4 col-12">
+                  <div className=" col-lg-4 col-md-4 col-12 m-0">
                     <label
                       htmlFor="strategyTag"
                       className="card-text-Color"

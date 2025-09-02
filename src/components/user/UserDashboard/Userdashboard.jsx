@@ -1041,7 +1041,15 @@ const Userdashboard = () => {
       button_status={false}
       backbutton_status={false}
     >
-      <div className="iq-card-body">
+    <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    {/* <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="/trade-history">Trade History</a></li> */}
+    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+  </ol>
+</nav>
+
+      <div className="iq-card-body px-0">
         <ul
           className="nav nav-tabs justify-content-center border-bottom rounded-0"
           id="myTab-2"
@@ -1060,7 +1068,7 @@ const Userdashboard = () => {
               aria-selected={activeTab1 === "CurrentPosition"}
               onClick={() => setActiveTab1("CurrentPosition")}
             >
-              🏦 <span>Current Script</span>
+              <span>Current Script</span>
             </a>
           </li>
           <li className="nav-item" role="presentation">
@@ -1076,7 +1084,7 @@ const Userdashboard = () => {
               aria-selected={activeTab1 === "OpenPosition"}
               onClick={() => setActiveTab1("OpenPosition")}
             >
-              📈 <span>Open Position</span>
+               <span>Open Position</span>
             </a>
           </li>
           <li className="nav-item" role="presentation">
@@ -1092,7 +1100,7 @@ const Userdashboard = () => {
               aria-selected={activeTab1 === "SuggestedBots"}
               onClick={() => setActiveTab1("SuggestedBots")}
             >
-              🤖 <span>Suggested Bots</span>
+               <span>Suggested Bots</span>
             </a>
           </li>
         </ul>

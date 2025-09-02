@@ -6009,7 +6009,8 @@ a.nav-link.active,
   font-family: "Inter", serif;
   border: none;
   border-bottom: 2px solid transparent;
-  font-size: 20px;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 
@@ -6472,7 +6473,7 @@ button.btn.btn-primary,
   background-color: var(--bg-color) !important;
   align-items: center;
   padding: 10px 15px !important;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .breadcrumb-links {
@@ -8768,9 +8769,13 @@ height: auto;
 }
 
 .card-bg-color {
-  background-color: var(--card-bg-color) !important;
+    background-color: var(--card-bg-color) !important;
+    padding: 10px 24px;
+    margin: 0px auto;
+    width: 100%;
+    justify-content: center;
+    /* width: 85%; */
 }
-
 .nav-pills .nav-link.active,
 .nav-pills .show>.nav-link {
   color: var(--pill-btn-text-color) !important;
@@ -8823,4 +8828,16 @@ height: auto;
   font-size: 0.75rem;
 }
 
- 
+ .breadcrumb {
+  background: transparent;
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "›"; /* separator ko / se change kar sakte ho */
+  color: #6c757d;
+}
+li.breadcrumb-item.active {
+    font-size: 20px;
+    font-weight: 500;
+}

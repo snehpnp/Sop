@@ -244,12 +244,12 @@ const FullDataTable = ({
     <div className="modal-body">
       <div
         className="table-container"
-        style={{
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          overflow: "hidden",
-        }}
+        // style={{
+        //   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        //   border: "1px solid #ddd",
+        //   borderRadius: "8px",
+        //   overflow: "hidden",
+        // }}
       >
         <MUIDataTable
           title={""}
