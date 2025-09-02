@@ -631,14 +631,45 @@ const Tradehistory = () => {
       button_status={false}
       backbutton_status={true}
     >
+          <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+  
+    <li class="breadcrumb-item active" aria-current="page">Trade History</li>
+  </ol>
+</nav>
       <div className="iq-card-body">
         <div className="">
           <div className="row g-3 mb-2">
             {" "}
             {/* Reduced mb-4 to mb-2 for less vertical gap */}
             {/* First Row: Strategy Tag, From Date, To Date */}
+         
+            {/* Second Row: Strategy Type Options (Pill Buttons) */}
             <div className="col-12">
-              <div className="row align-items-end g-2 justify-content-center">
+              <div className="d-flex report-btns justify-content-center">
+                <ul className="nav nav-tabs justify-content-center border-bottom rounded-0">
+                  {strategyNames.map((type, index) => (
+                    <li className="nav-item" key={index}>
+                      <a
+                        className={`nav-link mx-lg-3 ${
+                          selectStrategyType === type ? "active" : ""
+                        } `}
+                        onClick={() => {
+                          setStrategyType(type || "ChartingPlatform");
+                          sessionStorage.setItem("StrategyType", type);
+                        }}
+                       
+                      >
+                        {type}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+               <div className="card-bg-color">
+              <div className="row align-items-end g-2 justify-content-center px-lg-5 ">
                 {/* From Date */}
                 <div className="col-md-4 mb-2">
                   <label className="form-label">Select From Date</label>
@@ -678,35 +709,6 @@ const Tradehistory = () => {
                     </select>
                   </div>
                 )}
-              </div>
-            </div>
-            {/* Second Row: Strategy Type Options (Pill Buttons) */}
-            <div className="col-12">
-              <div className="d-flex report-btns justify-content-center">
-                <ul className="nav nav-pills shadow rounded-pill p-1">
-                  {strategyNames.map((type, index) => (
-                    <li className="nav-item" key={index}>
-                      <button
-                        className={`nav-link ${
-                          selectStrategyType === type ? "active" : ""
-                        } rounded-pill`}
-                        onClick={() => {
-                          setStrategyType(type || "ChartingPlatform");
-                          sessionStorage.setItem("StrategyType", type);
-                        }}
-                        style={{
-                          padding: "6px 12px", // Decreased size
-                          margin: "8px", // Increased gap between pills
-                          fontSize: "0.95rem",
-                          border: "none",
-                          outline: "none",
-                        }}
-                      >
-                        {type}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
             {/* Third Row: Segments (only if ChartingPlatform is selected) */}
@@ -750,7 +752,7 @@ const Tradehistory = () => {
                     checkBox={true}
                     isChecked={checkedRows}
                   />
-                  <div className="d-grid gap-2">
+                  <div className="">
                     <button
                       className="addbtn hoverNone"
                       onClick={handleSubmit}
@@ -799,7 +801,7 @@ const Tradehistory = () => {
                     </>
                   )}
                   {selectStrategyType !== "ChartingPlatform" && (
-                    <div className="d-grid gap-2">
+                    <div className="">
                       <button
                         className="addbtn hoverNone"
                         onClick={handleSubmit}
@@ -814,7 +816,7 @@ const Tradehistory = () => {
             </div>
           )}
           {showReportSections && (
-            <div className="mt-5">
+            <div className="mt-3">
               {/* AnalyticsOverview Section */}
 
               <ReportSection

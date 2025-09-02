@@ -33,11 +33,18 @@ const StrategyTag = () => {
             Page_title={"📄 All Strategy"}
             button_status={false}
             backbutton_status={true}>
-            <div className='d-flex justify-content-center align-items-center allStrategy-header'>
+
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+              
+                    <li className="breadcrumb-item active" aria-current="page">All Strategy</li>
+                </ol>
+            </nav>
+            {/* <div className='d-flex justify-content-center align-items-center allStrategy-header'>
 
                 <h4 className='ms-4 mb-0 mt-2'>Strategy Tags</h4>
 
-            </div>
+            </div> */}
             {loading ? (
                 <Loader />
             ) : (

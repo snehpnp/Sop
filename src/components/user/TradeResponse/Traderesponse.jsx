@@ -421,11 +421,38 @@ const TradeResponse = () => {
       button_status={false}
       backbutton_status={true}
     >
+      <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Trade Response</li>
+  </ol>
+</nav>
       <div className="iq-card-body">
         <div className="was-validated ">
           <div className="row g-3 mb-4">
+                <div className="col-12 col-md-12">
+              <div className="d-flex  report-btns justify-content-center">
+                <ul className="nav nav-tabs justify-content-center border-bottom rounded-0">
+                  {(strategyType || []).map((type, index) => (
+                    <li className="nav-item" key={index}>
+                      <a
+                        className={`nav-link mx-lg-3 ${
+                          selectStrategyType === type ? "active" : ""
+                        } `}
+                        onClick={() => {
+                          setSelectStrategyType(type);
+                          sessionStorage.setItem("StrategyType", type);
+                        }}
+                       
+                      >
+                        {type}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
              <div className="col-12 col-md-12">
-              <div className="history-page-dates justify-content-center">
+              <div className="history-page-dates justify-content-center card-bg-color">
                 <div className="history-page-dates ">
                   <div
                     className={`form-group mb-2 ${
@@ -460,34 +487,7 @@ const TradeResponse = () => {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-12">
-              <div className="d-flex  report-btns justify-content-center">
-                <ul className="nav nav-pills shadow rounded-pill p-1">
-                  {(strategyType || []).map((type, index) => (
-                    <li className="nav-item" key={index}>
-                      <button
-                        className={`nav-link ${
-                          selectStrategyType === type ? "active" : ""
-                        } rounded-pill`}
-                        onClick={() => {
-                          setSelectStrategyType(type);
-                          sessionStorage.setItem("StrategyType", type);
-                        }}
-                        style={{
-                          padding: "6px 14px",
-                          margin: "2px",
-                          border: "none",
-                          outline: "none",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {type}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+        
            
           </div>
 

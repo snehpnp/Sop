@@ -557,7 +557,7 @@ const TradeReport = () => {
           {strategyNames.map((type, index) => (
             <li className="nav-item" key={index}>
               <a
-                className={`nav-link me-lg-5 ${
+                className={`nav-link mx-lg-3 ${
                   selectStrategyType === type ? "active" : ""
                 } `}
                 onClick={() => handleStrategyTypeChange(type)}
@@ -777,6 +777,12 @@ const TradeReport = () => {
       button_status={false}
       backbutton_status={true}
     >
+
+          <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Trade Report</li>
+  </ol>
+</nav>
       <div className="iq-card-body">
         <div className="was-validated">
           <div className="row mb-4">

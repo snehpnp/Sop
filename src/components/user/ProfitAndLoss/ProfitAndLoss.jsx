@@ -147,38 +147,39 @@ const Tradehistory = () => {
       Page_title="💰 Net P&L"
       button_status={false}
       backbutton_status={true}>
+      <nav aria-label="breadcrumb"> 
+        <ol className="breadcrumb">
+          {/* <li className="breadcrumb-item"><a href="#">Home</a></li> */}
+          <li className="breadcrumb-item active" aria-current="page">Net P&L</li>
+        </ol>
+      </nav>
       <div className="iq-card-body">
         <div className="was-validated ">
           <div className="row g-3 mb-4">
             <div className="col-12 col-md-12 col-lg-12">
               <div className="d-flex  report-btns justify-content-center">
                 <ul
-                  className="nav nav-pills shadow rounded-pill p-1"
+                  className="nav nav-tabs justify-content-center border-bottom rounded-0"
                 >
                   {strategyNames.map((type, index) => (
                     <li className="nav-item" key={index}>
-                      <button
+                      <a
                         className={`nav-link ${selectStrategyType === type ? "active" : ""} rounded-pill`}
                         onClick={() => {
                           setStrategyType(type);
                           sessionStorage.setItem("StrategyType", type);
                         }}
-                        style={{
-                          padding: "10px 20px",
-                          margin: "5px",
-                          border: "none",
-                          outline: "none",
-                        }}
+                      
                       >
                         {type}
-                      </button>
+                      </a>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
             <div className="col-12 col-md-12 col-lg-12 mt-3">
-              <div className="history-page-dates  justify-content-center">
+              <div className="history-page-dates  justify-content-center card-bg-color">
                 <div className="history-page-dates">
                   <div
                     className={`form-group ${selectStrategyType === "ChartingPlatform"
