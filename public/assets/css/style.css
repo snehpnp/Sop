@@ -5985,7 +5985,7 @@ a.nav-link.active,
   border: 0;
   /* border-bottom: 1px solid var(--button-color) !important; */
   border-radius: 0px;
-  background-color: transparent !important;
+
 }
 
 .iq-card .iq-card-header .iq-header-title .card-title {
@@ -5997,7 +5997,7 @@ a.nav-link.active,
 .nav-tabs .nav-link.active {
   border-bottom: 2px solid #089bab;
   color: #089bab;
-  background: transparent !important;
+
   color: var(--font-color) !important;
 
   box-shadow: #00ca00;
@@ -8866,12 +8866,12 @@ li.breadcrumb-item.active {
 {
    border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-  background: #252525 !important;
+  background: rgb(26 26 26) !important;
 }
-[data-theme="Blackout"] ul.nav.nav-tabs.justify-content-center.border-bottom.rounded-0 .nav-link.active {
+[data-theme="Light"] ul.nav.nav-tabs.justify-content-center.border-bottom.rounded-0 .nav-link.active {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    background: rgb(26 26 26) !important;
+    background: rgb(231 239 253) !important;
 }
 [data-theme="Blackout"] li.breadcrumb-item.active {
  color: #fff !important;

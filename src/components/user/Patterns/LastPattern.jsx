@@ -112,10 +112,18 @@ const LastPattern = () => {
       Page_title="📈 Last Pattern"
       button_status={false}
       backbutton_status={false}>
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            
+            <li className="breadcrumb-item active" aria-current="page">
+              Last Pattern
+            </li>
+          </ol>
+        </nav>
       <div className="iq-card-body">
-        <div className="row">
+        <div className="row card-bg-color">
           <div className="col-md-6">
-            <div className="form-group">
+            <div className="">
               <label className="card-text-Color">Select Pattern</label>
               <select
                 className="form-control  mt-2"
@@ -130,7 +138,7 @@ const LastPattern = () => {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="form-group">
+            <div className="">
               <label className="card-text-Color">Select Specific Pattern</label>
               <select
                 className="form-control  mt-2"

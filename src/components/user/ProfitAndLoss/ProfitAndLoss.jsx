@@ -164,7 +164,7 @@ const Tradehistory = () => {
                   {strategyNames.map((type, index) => (
                     <li className="nav-item" key={index}>
                       <a
-                        className={`nav-link ${selectStrategyType === type ? "active" : ""} rounded-pill`}
+                        className={`nav-link ${selectStrategyType === type ? "active" : ""} `}
                         onClick={() => {
                           setStrategyType(type);
                           sessionStorage.setItem("StrategyType", type);

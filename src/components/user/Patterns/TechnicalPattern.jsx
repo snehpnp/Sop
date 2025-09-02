@@ -304,13 +304,18 @@ const TechnicalPattern = () => {
       button_status={false}
       backbutton_status={true}
     >
-      <div className="row">
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item active" aria-current="page">Technical Pattern</li>
+        </ol>
+      </nav>
+      <div className="iq-card-body">
         {/* Filter Controls */}
-        <div className="col-xl-12">
+        <div className="col-xl-12 card-bg-color">
           <div className="row">
             {/* Pattern Type Selector */}
             <div className="col-md-3">
-              <div className="form-group">
+              <div className="">
                 <label className="card-text-Color">Select Technical pattern</label>
                 <select
                   className="form-control mt-2"
@@ -325,7 +330,7 @@ const TechnicalPattern = () => {
             
             {/* Pattern Selector */}
             <div className="col-md-3">
-              <div className="form-group">
+              <div className="">
                 <label className="card-text-Color">Pattern</label>
                 <select
                   className="form-control mt-2"
@@ -359,7 +364,7 @@ const TechnicalPattern = () => {
             {/* Script Type Selector (Only for Charting Patterns) */}
             {patternType === "Charting Patterns" && (
               <div className="col-md-2">
-                <div className="form-group">
+                <div className="">
                   <label className="card-text-Color">Script</label>
                   <select
                     className="form-control mt-2"
@@ -376,7 +381,7 @@ const TechnicalPattern = () => {
             
             {/* Time Frame Selector */}
             <div className={patternType === "Charting Patterns" ? "col-md-2" : "col-md-3"}>
-              <div className="form-group">
+              <div className="">
                 <label className="card-text-Color">Time Frame</label>
                 <select
                   className="form-control mt-2"
@@ -394,7 +399,7 @@ const TechnicalPattern = () => {
             
             {/* Symbol Selector */}
             <div className={patternType === "Charting Patterns" ? "col-md-2" : "col-md-3"}>
-              <div className="form-group">
+              <div className="">
                 <label className="card-text-Color">Select Specific Pattern</label>
                 <select
                   className="form-control mt-2"
@@ -433,7 +438,7 @@ const TechnicalPattern = () => {
                     {/* Left Side - Text Content */}
                     <div className="col-12 col-md-6 p-3">
                       <h5 className="mt-3">Description</h5>
-                      <p>{candlePatternImage?.data[0]?.Description || "N/A"}</p>
+                      <p style={{fontSize: "14px", color: "#555"}}>{candlePatternImage?.data[0]?.Description || "N/A"}</p>
                     </div>
 
                     {/* Right Side - Image */}
