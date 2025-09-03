@@ -1429,8 +1429,7 @@ const Header = ({ permissionData }) => {
                   className="btn-group paper-live-trading-btn tradin-btn-align"
                   role="group"
                   style={{
-                    backgroundColor: "#2a2e32",
-                    borderRadius: "20px",
+                  borderRadius: "20px",
                     padding: "2px",
                     height: "30px",
                     marginLeft: "0.2rem",
@@ -1438,39 +1437,41 @@ const Header = ({ permissionData }) => {
                 >
                   <button
                     type="button"
-                    className="btn border-0"
+                    className="btn  paper-trade"
                     style={{
                       width: "100px",
-                      backgroundColor: getTradingStatus ? "#2a2e32" : "#7367f0",
-                      color: getTradingStatus ? "#6c7293" : "white",
+                     
                       fontWeight: "500",
-                      padding: "6px 0px",
+                      padding: "3px 0px",
                       fontSize: "11px",
                       transition: "all 0.3s ease",
                       borderRadius: "18px",
                       boxShadow: getTradingStatus
                         ? "none"
-                        : "0 2px 6px rgba(115,103,240,0.4)",
+                        : "box-shadow: rgb(0 0 0) 0px 2px 6px;",
+                        borderColor:getTradingStatus?"transparent":"#86858fff"
                     }}
+
                     onClick={() => handleToggle(false)}
                   >
                     Paper Trading
                   </button>
                   <button
                     type="button"
-                    className="btn border-0"
+                    className="btn  live-trade"
                     style={{
                       width: "100px",
-                      backgroundColor: getTradingStatus ? "#7367f0" : "#2a2e32",
-                      color: "white",
+                      
+                     
                       fontWeight: "500",
-                      padding: "6px 0px",
+                      padding: "3px 0px",
                       fontSize: "11px",
                       transition: "all 0.3s ease",
-                      borderRadius: "18px",
-                      boxShadow: getTradingStatus
-                        ? "0 2px 6px rgba(115,103,240,0.4)"
+                        borderRadius: "18px",
+                        boxShadow: getTradingStatus
+                          ? "0 2px 6px rgba(115,103,240,0.4)"
                         : "none",
+                        borderColor:getTradingStatus?"  #9998a3ff":"transparent"
                     }}
                     onClick={() => handleToggle(true)}
                   >
@@ -1488,45 +1489,29 @@ const Header = ({ permissionData }) => {
                   ) : (
                     <></>
                   )}
-<li className="nav-item dropdown">
+           
+<li className="nav-item dropdown ">
+
+  
   <a
-    href="#"
-    className="nav-link dropdown-toggle d-flex align-items-center"
-    id="priceDropdown"
-    role="button"
-    data-bs-toggle="dropdown"
-    aria-expanded="false"
-  >
-    📈 Live Prices
-  </a>
+  href="#"
+  className="nav-link dropdown-toggle d-flex align-items-center"
+  id="priceDropdown"
+  role="button"
+  data-bs-toggle="dropdown"
+  aria-expanded="false"
+>
+  📈 Live Prices
+  <i className="ri-arrow-down-s-line ms-1"></i>
+</a>
+
 
   <ul
     className="dropdown-menu dropdown-menu-end shadow-sm"
     aria-labelledby="priceDropdown"
     style={{ minWidth: "180px" }}
   >
-    <li>
-      <div className="dropdown-item d-flex justify-content-between">
-        <span>NIFTY:</span>
-        <span ref={niftyRef} className="fw-bold text-success"></span>
-      </div>
-    </li>
-    <li>
-      <div className="dropdown-item d-flex justify-content-between">
-        <span>BANKNIFTY:</span>
-        <span ref={bankNiftyRef} className="fw-bold text-success"></span>
-      </div>
-    </li>
-    <li>
-      <div className="dropdown-item d-flex justify-content-between">
-        <span>FINNIFTY:</span>
-        <span className="fw-bold text-success"></span>
-      </div>
-    </li>
-  </ul>
-</li>
-
-                  <li className="live-price-item">
+    <li className="live-price-item w-full mb-2">
                     <div className="live-price-box">
                       <span className="label card-text-Color">NIFTY:</span>
                       <span
@@ -1537,8 +1522,7 @@ const Header = ({ permissionData }) => {
                       </span>
                     </div>
                   </li>
-
-                  <li className="live-price-item">
+   <li className="live-price-item w-full mb-2">
                     <div className="live-price-box">
                       <span className="label card-text-Color">BANKNIFTY:</span>
                       <span
@@ -1558,6 +1542,12 @@ const Header = ({ permissionData }) => {
                       </span>
                     </div>
                   </li>
+  </ul>
+</li>
+
+                  
+
+                  
 {/* 
                   <li
                     className="nav-item mx-3 btn-text-color"
