@@ -8879,7 +8879,7 @@ li.breadcrumb-item.active {
  color: #fff !important;
 }
 
- [data-theme="Light"] .MuiButtonBase-root.MuiTab-root {
+ [data-theme="Light"].MuiButtonBase-root.MuiTab-root,  [data-theme="Blackout"].MuiButtonBase-root.MuiTab-root {
 
     font-size: 16px;
     cursor: pointer;
@@ -9225,8 +9225,42 @@ li.breadcrumb-item.active {
 .myplan-container.card-bg-color .MuiButtonBase-root{
     background-color: transparent !important;
 }
-.plan-modal {
+ [data-theme="Blackout"] .plan-modal {
     background: #1a1a1a;
-    border: 1px solid #4c4c4c;
+    border: 1px dashed #4c4c4c;
     border-radius: 7px;
+}
+[data-theme="Blackout"] .MuiOutlinedInput-root.MuiInputBase-colorPrimary {
+    background: #1a1a1a;
+    border: none !important;
+    color: #fff !important;
+}
+button.MuiButtonBase-root.MuiButton-root.MuiButton-outlined
+{
+text-transform: capitalize !important;
+}
+
+ [data-theme="Blackout"] .plan-modal .MuiOutlinedInput-notchedOutline
+{
+  border-color: #fff !important;
+}
+ [data-theme="Blackout"] .plan-modal .MuiFormLabel-root {
+    color: rgb(255 255 255) !important;
+    
+}
+[data-theme="Blackout"]  .plan-tab .MuiTab-root {
+    background: #292929 !important;
+ 
+}
+[data-theme="Blackout"]  .plan-tab .MuiTabs-root {
+    width: 100% !important;
+    background: #292929 !important;
+    border-bottom: 1px solid #fff;
+}
+[data-theme="Blackout"] .MuiTab-root.Mui-selected {
+    background: #1a1a1a !important;
+    color: #fff !important;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
 }

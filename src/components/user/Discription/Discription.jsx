@@ -20,6 +20,7 @@ const Discription = () => {
       button_status={false}
       backbutton_status={true}>
       <Box sx={{ width: "100%", typography: "body1" }}>
+        <div className="plan-tab">
         <TabContext value={value}>
           {/* 🛠️ Styled Tabs */}
           <Box
@@ -34,6 +35,7 @@ const Discription = () => {
             <TabList
               onChange={handleChange}
               aria-label="lab API tabs example"
+              
               sx={{
                 "& .MuiTab-root": {
                   width: "33.33%", // Equal width for all tabs
@@ -64,6 +66,7 @@ const Discription = () => {
             <DiscriptionData Type={"Candlestick"} />
           </TabPanel>
         </TabContext>
+        </div>
       </Box>
     </Content>
   );

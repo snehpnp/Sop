@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 // import Tab from "react-bootstrap/Tab";
 import Tabs from "@mui/material/Tabs";
 import NewsTicker from "./Expair";
-import "./AllPlan.css";
+
 import Content from "../../../ExtraComponent/Content";
 
 import Box from "@mui/material/Box";
@@ -730,7 +730,7 @@ const ServicesList = () => {
       </div>
 
       <Box sx={{ width: "100%", typography: "body1" }}>
-        <div className="wrapper-container">
+        <div className="wrapper-container plan-tab">
           <Tabs
             value={value}
             onChange={(event, newValue) => setValue(newValue)}

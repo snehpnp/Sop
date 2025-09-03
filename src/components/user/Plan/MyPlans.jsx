@@ -4,7 +4,7 @@ import { Purchasedplan } from "../../CommonAPI/User";
 import Swal from "sweetalert2";
 import { TabContext, TabList, TabPanel } from "@mui/lab"; // Import TabList and related components
 import { Box, Tab } from "@mui/material"; // Import Tab from Material-UI
-import "./MyPlan.css"; // Import external CSS
+
 
 const MyPurchasedPlans = () => {
   const username = localStorage.getItem("name");

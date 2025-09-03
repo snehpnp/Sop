@@ -164,10 +164,15 @@ const Pannel = () => {
         Page_title={"🖥️ Panel Track"}
         button_status={false}
         backbutton_status={false}>
+          <nav aria-label="breadcrumb"> 
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item active" aria-current="page">Panel Track</li>
+            </ol>
+          </nav>
         <div className="iq-card-body">
           <div>
-            <div className="row">
-              <div className="form-group col-lg-4">
+            <div className="row card-bg-color">
+              <div className=" col-lg-4">
                 <label>Select From Date</label>
                 <DatePicker
                   className="form-select"
@@ -175,7 +180,7 @@ const Pannel = () => {
                   onChange={(date) => setFromData(date)}
                 />
               </div>
-              <div className="form-group col-lg-4">
+              <div className=" col-lg-4">
                 <label>Select To Date</label>
                 <DatePicker
                   className="form-select"
@@ -183,7 +188,7 @@ const Pannel = () => {
                   onChange={(date) => setToData(date)}
                 />
               </div>
-              <div className="form-group col-lg-4">
+              <div className=" col-lg-4">
                 <label htmlFor="email">Activity</label>
                 <select
                   className="form-select"

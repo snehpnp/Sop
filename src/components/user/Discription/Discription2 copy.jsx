@@ -200,21 +200,16 @@ const DescriptionPage = () => {
       <div className="desc-page-wrapper card-bg-color">
         <div className=" card-bg-color">
           {/* Tab Navigation */}
-          <ul className="nav nav-pills shadow rounded-pill p-1 w-50 mx-auto">
+          <ul className="nav nav-tabs justify-content-center border-bottom rounded-0 p-1 mb-3">
             {TABS.map((tab) => (
               <li className="nav-item" key={tab}>
-                <button style={{
-                  padding: "10px 20px",
-                  margin: "5px",
-                  border: "none",
-                  outline: "none",
-                }}
-                  className={`nav-link rounded-pill ${activeTab === tab ? "active" : ""}`
+                <a 
+                  className={`nav-link mx-lg-3 ${activeTab === tab ? "active" : ""}`
                   }
                   onClick={() => handleTabChange(tab)}
                 >
                   {tab}
-                </button>
+                </a>
               </li>
             ))}
           </ul>
