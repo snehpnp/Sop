@@ -7,7 +7,7 @@ import axios from "axios";
 import {
   addChartingScript,
   getChargingPlatformDataApi,
-  
+
   TradingStatus,
 } from "../CommonAPI/User";
 import Swal from "sweetalert2";
@@ -85,7 +85,7 @@ const Header = ({ permissionData }) => {
   const niftyRef = useRef(null);
   const bankNiftyRef = useRef(null);
 
-  
+
   const handleBroker = async () => {
     setShowApiStepsModal(true);
   };
@@ -707,46 +707,46 @@ const Header = ({ permissionData }) => {
       let tokenMap = {}; // use let instead of const
 
       const response = await GetIndexData();
-     
+
       // if (response.Status) {
-        // reset mapping each time
-        tokenMap = {};
-        const channels = [];
+      // reset mapping each time
+      tokenMap = {};
+      const channels = [];
 
-        if (response.FiniftyToken?.[0]) {
-          channels.push(`NFO|${response.FiniftyToken[0]}`);
-          tokenMap[response.FiniftyToken[0]] = "FINNIFTY";
-        }
+      if (response.FiniftyToken?.[0]) {
+        channels.push(`NFO|${response.FiniftyToken[0]}`);
+        tokenMap[response.FiniftyToken[0]] = "FINNIFTY";
+      }
 
-        if (response.BankniftyToken?.[0]) {
-          channels.push(`NFO|${response.BankniftyToken[0]}`);
-          tokenMap[response.BankniftyToken[0]] = "BANKNIFTY";
-        }
+      if (response.BankniftyToken?.[0]) {
+        channels.push(`NFO|${response.BankniftyToken[0]}`);
+        tokenMap[response.BankniftyToken[0]] = "BANKNIFTY";
+      }
 
-        if (response.NiftyToken?.[0]) {
-          channels.push(`NFO|${response.NiftyToken[0]}`);
-          tokenMap[response.NiftyToken[0]] = "NIFTY";
-        }
+      if (response.NiftyToken?.[0]) {
+        channels.push(`NFO|${response.NiftyToken[0]}`);
+        tokenMap[response.NiftyToken[0]] = "NIFTY";
+      }
 
-        // Purana WebSocket close kar do
-        if (currentWebSocket && typeof currentWebSocket.close === "function") {
-          currentWebSocket.close();
-        }
+      // Purana WebSocket close kar do
+      if (currentWebSocket && typeof currentWebSocket.close === "function") {
+        currentWebSocket.close();
+      }
 
 
-        // Connect new WebSocket with all channels
-        currentWebSocket = connectWebSocket(
-          { userId: response?.Userid, sessionId: response?.Access_Token || ""},
-          channels, // pass array of channels
-          (data) => {
-            if (data.lp && data.tk) {
-              const indexName = tokenMap[data.tk];
-              if (indexName) {
-                $(`.LivePrice_${indexName}`).html(data.lp);
-              }
+      // Connect new WebSocket with all channels
+      currentWebSocket = connectWebSocket(
+        { userId: response?.Userid, sessionId: response?.Access_Token || "" },
+        channels, // pass array of channels
+        (data) => {
+          if (data.lp && data.tk) {
+            const indexName = tokenMap[data.tk];
+            if (indexName) {
+              $(`.LivePrice_${indexName}`).html(data.lp);
             }
           }
-        );
+        }
+      );
       // }
     } catch (err) {
       console.log("Error in fetching Index Data", err);
@@ -763,7 +763,7 @@ const Header = ({ permissionData }) => {
               alt="Logo"
               id="header_img2"
             />
-         
+
           </div>
 
           <button className="botIcon" onClick={handleChatToggle}>
@@ -824,7 +824,7 @@ const Header = ({ permissionData }) => {
                         </button>
                       </li>
 
-                     
+
 
                       <li>
                         <button
@@ -857,14 +857,13 @@ const Header = ({ permissionData }) => {
                     </ul>
                   </li>
 
-                  
+
 
                   {role === "Admin" && (
                     <div className="d-flex justify-content-end align-items-center  btn-width">
                       <button
-                        className={`w-100 py-1 px-3 shadow-sm btn m-2 ${
-                          isAutoLogin ? "btn-success" : "btn-danger"
-                        }`}
+                        className={`w-100 py-1 px-3 shadow-sm btn m-2 ${isAutoLogin ? "btn-success" : "btn-danger"
+                          }`}
                         onClick={handleAutoLoginbtn}
                         disabled={autoLoginLoading}
                       >
@@ -890,9 +889,8 @@ const Header = ({ permissionData }) => {
                       </button>
 
                       <button
-                        className={`w-100 py-1 px-3 shadow-sm btn m-2 ${
-                          isDataStart ? "btn-success" : "btn-danger"
-                        }`}
+                        className={`w-100 py-1 px-3 shadow-sm btn m-2 ${isDataStart ? "btn-success" : "btn-danger"
+                          }`}
                         onClick={handleDataStart}
                         disabled={dataStartloading}
                       >
@@ -971,15 +969,13 @@ const Header = ({ permissionData }) => {
                   </div>
 
                   <li
-                    className={`nav-item ${
-                      activeElement === "profile" ? "iq-show" : ""
-                    }`}
+                    className={`nav-item ${activeElement === "profile" ? "iq-show" : ""
+                      }`}
                   >
                     <a
                       href="#"
-                      className={`text-decoration-none search-toggle d-flex align-items-center iq-waves-effectt ${
-                        activeElement === "profile" ? "active" : ""
-                      }`}
+                      className={`text-decoration-none search-toggle d-flex align-items-center iq-waves-effectt ${activeElement === "profile" ? "active" : ""
+                        }`}
                       onClick={(e) => handleClick(e, "profile")}
                     >
                       <img
@@ -1162,9 +1158,8 @@ const Header = ({ permissionData }) => {
                                   {chartingSegments.map((segment) => (
                                     <li className="nav-item" key={segment}>
                                       <button
-                                        className={`nav-link ${
-                                          activeTab === segment ? "active" : ""
-                                        } rounded-pill`}
+                                        className={`nav-link ${activeTab === segment ? "active" : ""
+                                          } rounded-pill`}
                                         onClick={() => setActiveTab(segment)}
                                         style={{
                                           padding: "4px 10px",
@@ -1197,9 +1192,8 @@ const Header = ({ permissionData }) => {
                                       type="number"
                                       name="fund"
                                       className="form-control modern-input"
-                                      placeholder={`Enter ${
-                                        activeTab === "Cash" ? "fund" : "lot"
-                                      } amount`}
+                                      placeholder={`Enter ${activeTab === "Cash" ? "fund" : "lot"
+                                        } amount`}
                                       value={
                                         activeTab === "Cash"
                                           ? formData.fund
@@ -1377,15 +1371,13 @@ const Header = ({ permissionData }) => {
                   </div>
 
                   <li
-                    className={`nav-item ${
-                      activeElement === "profile" ? "iq-show" : ""
-                    }`}
+                    className={`nav-item ${activeElement === "profile" ? "iq-show" : ""
+                      }`}
                   >
                     <a
                       href="#"
-                      className={`search-toggle d-flex align-items-center iq-waves-effectt ${
-                        activeElement === "profile" ? "active" : ""
-                      }`}
+                      className={`search-toggle d-flex align-items-center iq-waves-effectt ${activeElement === "profile" ? "active" : ""
+                        }`}
                       onClick={(e) => handleClick(e, "profile")}
                     >
                       <div className="caption">
@@ -1425,61 +1417,62 @@ const Header = ({ permissionData }) => {
                 className="collapse navbar-collapse"
                 id="navbarSupportedContent"
               >
-                <div
-                  className="btn-group paper-live-trading-btn tradin-btn-align"
-                  role="group"
-                  style={{
-                  borderRadius: "20px",
-                    padding: "2px",
-                    height: "30px",
-                    marginLeft: "0.2rem",
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="btn  paper-trade"
-                    style={{
-                      width: "100px",
-                     
-                      fontWeight: "500",
-                      padding: "3px 0px",
-                      fontSize: "11px",
-                      transition: "all 0.3s ease",
-                      borderRadius: "18px",
-                      boxShadow: getTradingStatus
-                        ? "none"
-                        : "box-shadow: rgb(0 0 0) 0px 2px 6px;",
-                        borderColor:getTradingStatus?"transparent":"#86858fff"
-                    }}
 
-                    onClick={() => handleToggle(false)}
-                  >
-                    Paper Trading
-                  </button>
-                  <button
-                    type="button"
-                    className="btn  live-trade"
+
+                <ul className="navbar-nav ms-auto navbar-list align-items-center">
+                  <div
+                    className="btn-group paper-live-trading-btn tradin-btn-align"
+                    role="group"
                     style={{
-                      width: "100px",
-                      
-                     
-                      fontWeight: "500",
-                      padding: "3px 0px",
-                      fontSize: "11px",
-                      transition: "all 0.3s ease",
+                      borderRadius: "20px",
+                      padding: "2px",
+                      height: "30px",
+                      marginLeft: "0.2rem",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      className="btn  paper-trade"
+                      style={{
+                        width: "100px",
+
+                        fontWeight: "500",
+                        padding: "3px 0px",
+                        fontSize: "11px",
+                        transition: "all 0.3s ease",
+                        borderRadius: "18px",
+                        boxShadow: getTradingStatus
+                          ? "none"
+                          : "box-shadow: rgb(0 0 0) 0px 2px 6px;",
+                        borderColor: getTradingStatus ? "transparent" : "#86858fff"
+                      }}
+
+                      onClick={() => handleToggle(false)}
+                    >
+                      Paper Trading
+                    </button>
+                    <button
+                      type="button"
+                      className="btn  live-trade"
+                      style={{
+                        width: "100px",
+
+
+                        fontWeight: "500",
+                        padding: "3px 0px",
+                        fontSize: "11px",
+                        transition: "all 0.3s ease",
                         borderRadius: "18px",
                         boxShadow: getTradingStatus
                           ? "0 2px 6px rgba(115,103,240,0.4)"
-                        : "none",
-                        borderColor:getTradingStatus?"  #9998a3ff":"transparent"
-                    }}
-                    onClick={() => handleToggle(true)}
-                  >
-                    Live Trading
-                  </button>
-                </div>
-
-                <ul className="navbar-nav ms-auto navbar-list align-items-center">
+                          : "none",
+                        borderColor: getTradingStatus ? "  #9998a3ff" : "transparent"
+                      }}
+                      onClick={() => handleToggle(true)}
+                    >
+                      Live Trading
+                    </button>
+                  </div>
                   {getBrokerName && getBrokerName == "Demo" ? (
                     <li className="nav-item">
                       <button type="button" className="addbtn  btn1">
@@ -1489,66 +1482,66 @@ const Header = ({ permissionData }) => {
                   ) : (
                     <></>
                   )}
-           
-<li className="nav-item dropdown ">
 
-  
-  <a
-  href="#"
-  className="nav-link dropdown-toggle d-flex align-items-center"
-  id="priceDropdown"
-  role="button"
-  data-bs-toggle="dropdown"
-  aria-expanded="false"
->
-  📈 Live Prices
-  <i className="ri-arrow-down-s-line ms-1"></i>
-</a>
+                  <li className="nav-item dropdown ">
 
 
-  <ul
-    className="dropdown-menu dropdown-menu-end shadow-sm"
-    aria-labelledby="priceDropdown"
-    style={{ minWidth: "180px" }}
-  >
-    <li className="live-price-item w-full mb-2">
-                    <div className="live-price-box">
-                      <span className="label card-text-Color">NIFTY:</span>
-                      <span
-                        className="LivePrice_NIFTY liveprice-text-color ms-1"
-                        ref={niftyRef}
-                      >
-                        {}
-                      </span>
-                    </div>
+                    <a
+                      href="#"
+                      className="nav-link dropdown-toggle d-flex align-items-center"
+                      id="priceDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      📈 Live Prices
+                      <i className="ri-arrow-down-s-line ms-1"></i>
+                    </a>
+
+
+                    <ul
+                      className="dropdown-menu dropdown-menu-end shadow-sm"
+                      aria-labelledby="priceDropdown"
+                      style={{ minWidth: "180px" }}
+                    >
+                      <li className="live-price-item w-full mb-2">
+                        <div className="live-price-box">
+                          <span className="label card-text-Color">NIFTY:</span>
+                          <span
+                            className="LivePrice_NIFTY liveprice-text-color ms-1"
+                            ref={niftyRef}
+                          >
+                            { }
+                          </span>
+                        </div>
+                      </li>
+                      <li className="live-price-item w-full mb-2">
+                        <div className="live-price-box">
+                          <span className="label card-text-Color">BANKNIFTY:</span>
+                          <span
+                            className="LivePrice_BANKNIFTY liveprice-text-color ms-1"
+                            ref={bankNiftyRef}
+                          >
+                            { }
+                          </span>
+                        </div>
+                      </li>
+
+                      <li className="live-price-item">
+                        <div className="live-price-box">
+                          <span className="label card-text-Color">FINNIFTY:</span>
+                          <span className="LivePrice_FINNIFTY liveprice-text-color ms-1">
+                            { }
+                          </span>
+                        </div>
+                      </li>
+                    </ul>
                   </li>
-   <li className="live-price-item w-full mb-2">
-                    <div className="live-price-box">
-                      <span className="label card-text-Color">BANKNIFTY:</span>
-                      <span
-                        className="LivePrice_BANKNIFTY liveprice-text-color ms-1"
-                        ref={bankNiftyRef}
-                      >
-                        {}
-                      </span>
-                    </div>
-                  </li>
 
-                  <li className="live-price-item">
-                    <div className="live-price-box">
-                      <span className="label card-text-Color">FINNIFTY:</span>
-                      <span className="LivePrice_FINNIFTY liveprice-text-color ms-1">
-                        {}
-                      </span>
-                    </div>
-                  </li>
-  </ul>
-</li>
 
-                  
 
-                  
-{/* 
+
+                  {/* 
                   <li
                     className="nav-item mx-3 btn-text-color"
                     onClick={toggleFundsVisibility}
@@ -1679,15 +1672,13 @@ const Header = ({ permissionData }) => {
                   </div>
 
                   <li
-                    className={`nav-item ${
-                      activeElement === "profile" ? "iq-show" : ""
-                    }`}
+                    className={`nav-item ${activeElement === "profile" ? "iq-show" : ""
+                      }`}
                   >
                     <a
                       href="#"
-                      className={`search-toggle d-flex align-items-center iq-waves-effectt ${
-                        activeElement === "profile" ? "active" : ""
-                      }`}
+                      className={`search-toggle d-flex align-items-center iq-waves-effectt ${activeElement === "profile" ? "active" : ""
+                        }`}
                       onClick={(e) => handleClick(e, "profile")}
                     >
                       {/* <img
@@ -1736,7 +1727,7 @@ const Header = ({ permissionData }) => {
                           >
                             <div className="media align-items-center d-flex">
                               <div className="rounded card-icon bg-soft-primary">
-                              <i class="ri-wallet-line"></i>
+                                <i class="ri-wallet-line"></i>
                               </div>
                               <div className="media-body ms-3">
                                 <h6 className="mb-0 ">My Funds</h6>
@@ -1745,10 +1736,10 @@ const Header = ({ permissionData }) => {
                                 </p>
                               </div>
                             </div>
-         
-                    
-                    
-                 
+
+
+
+
                           </Link>
                           <Link
                             to="/user/plans"
@@ -1940,15 +1931,13 @@ const Header = ({ permissionData }) => {
                   </li> */}
 
                   <li
-                    className={`nav-item ${
-                      activeElement === "profile" ? "iq-show" : ""
-                    }`}
+                    className={`nav-item ${activeElement === "profile" ? "iq-show" : ""
+                      }`}
                   >
                     <a
                       href="#"
-                      className={`text-decoration-none search-toggle d-flex align-items-center iq-waves-effectt ${
-                        activeElement === "profile" ? "active" : ""
-                      }`}
+                      className={`text-decoration-none search-toggle d-flex align-items-center iq-waves-effectt ${activeElement === "profile" ? "active" : ""
+                        }`}
                       onClick={(e) => handleClick(e, "profile")}
                     >
                       <img
@@ -2182,7 +2171,7 @@ const Header = ({ permissionData }) => {
           </div>
         </div>
       )}
-     
+
       <UpdateBrokerKey
         isVisible={isModalVisible}
         closeModal={handleCloseModal}
