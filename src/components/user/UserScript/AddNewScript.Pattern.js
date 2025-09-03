@@ -43,10 +43,10 @@ const AddClient = () => {
 
     const getEndData = (stg) => {
         const dataWithoutLastItem = location?.state.data.scriptType.data.slice(0, -1);
-        const foundItem = dataWithoutLastItem.find((item) => {
-            return item.Pattern.includes(stg);
+        const foundItem = dataWithoutLastItem?.find((item) => {
+            return item?.Pattern?.includes(stg);
         });
-        return foundItem.EndDate;
+        return foundItem?.EndDate;
     };
 
     useEffect(() => {

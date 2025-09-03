@@ -1830,7 +1830,7 @@ const DynamicForm = ({
                             </label>
 
                             <div className="row">
-                              <div className="col-lg-3 col-md-4 col-sm-6">
+                              <div className="col-lg-6 col-md-4 col-sm-6">
                                 <div className="row d-flex justify-content-start">
                                   <div className="mb-4">
                                     <div className="form-check custom-checkbox">
@@ -1874,7 +1874,7 @@ const DynamicForm = ({
                               </div>
                               {field.options.map((opData) => (
                                 <div
-                                  className="col-lg-3 col-md-4 col-sm-6"
+                                  className="col-lg-6 col-md-4 col-sm-6"
                                   key={opData.value}
                                 >
                                   <div className="row d-flex justify-content-start">

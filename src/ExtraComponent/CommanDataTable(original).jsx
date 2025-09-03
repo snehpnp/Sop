@@ -17,22 +17,22 @@ const FullDataTable = ({
   FixedRowPerPage,
 }) => {
   const [selectedColumns, setSelectedColumns] = useState(
-    columns?.slice(0, 7) || []
+    columns || []
   );
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(
-    columns?.slice(0, 7) || []
+    columns || []
   );
   const [checkedRows, setCheckedRows] = useState(
     isChecked !== undefined ? [isChecked] : []
   );
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    setSelectedColumns(columns.slice(0, 7));
-    setTempSelectedColumns(columns.slice(0, 7));
+    setSelectedColumns(columns);
+    setTempSelectedColumns(columns);
   }, [columns]);
 
   // Modal handlers
@@ -146,7 +146,7 @@ const FullDataTable = ({
         name: "Action",
         label: (
           <>
-            <button
+            {/* <button
               onClick={(e) => {
                 e.stopPropagation();
                 handleModalOpen();
@@ -162,8 +162,8 @@ const FullDataTable = ({
               }}
             >
               {">"}
-            </button>
-            <button
+            </button> */}
+            {/* <button
               onClick={toggleExpand}
               style={{
                 backgroundColor: "#000",
@@ -175,7 +175,7 @@ const FullDataTable = ({
               }}
             >
               {isExpanded ? "<<" : ">>"}
-            </button>
+            </button> */}
           </>
         ),
         options: {

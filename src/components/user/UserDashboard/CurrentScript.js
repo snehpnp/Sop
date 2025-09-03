@@ -35,7 +35,14 @@ import $ from "jquery";
 import ChartingCard from "./ChartingCard";
 import AddChartingScript from "../UserScript/AddChartingScript";
 
-const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScript }) => {
+const Coptyscript = ({
+  tableType,
+  data,
+  selectedType,
+  FromDate,
+  ToDate,
+  getAddScript,
+}) => {
   const userName = localStorage.getItem("name");
   const role = localStorage.getItem("Role");
   const strategyType = sessionStorage.getItem("StrategyType");
@@ -66,6 +73,453 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
     PatternOption: [],
     Marketwise: [],
     PremiumRotation: [],
+  });
+
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      MainStrategy: "", // str
+      Strategy: "", // str
+      Symbol: "", // str
+      Username: "", // str
+      ETPattern: "", // str (Trade type)
+      Timeframe: "", // str
+      Targetvalue: 0.0, // float
+      Slvalue: 0.0, // float
+      TStype: "", // str
+      LowerRange: 0.0, // float (Profit in scalping)
+      HigherRange: 0.0, // float (Loss in scalping)
+      HoldExit: "", // str
+      EntryPrice: 0.0, // float
+      EntryRange: 0.0, // float
+      EntryTime: "",
+      ExitTime: "",
+      FinalTarget: 0.0,
+
+      ExitDay: "", // str
+      TradeExecution: "", // str
+      Group: "", // str
+
+      // Depth values for CE and PE options
+      CEDepthLower: 0.0, // float
+      CEDepthHigher: 0.0, // float
+      PEDepthLower: 0.0, // float
+      PEDepthHigher: 0.0, // float
+      CEDeepLower: 0.0, // float
+      CEDeepHigher: 0.0, // float
+      PEDeepLower: 0.0, // float
+      PEDeepHigher: 0.0, // float
+      DepthofStrike: 0.0, // float
+      TradeCount: 0, // int
+
+      // Additional trade parameters
+      tgp2: 0.0, // float
+      tgp3: 0.0, // float
+      RolloverTF: false, // bool
+      RolloverDay: "", // str
+      RolloverTime: "", // str
+      TargetExit: "true", // bool
+      RepeatationCount: 0, // int
+      Profit: 0.0, // float
+      Loss: 0.0, // float
+      TradeExecution: "",
+      WorkingDay: [],
+    },
+    validate: (values) => {
+      let errors = {};
+      const mcxMaxTime = "23:29:59";
+      const mcxMinTime = "08:59:59";
+      const maxTime = "15:29:59";
+      const minTime = "09:15:00";
+
+      if (
+        values.TStype == "" &&
+        showEditModal &&
+        EditDataScalping.ScalpType != "Fixed Price"
+      ) {
+        errors.TStype = "Please select Measurement Type";
+      }
+
+      if (values.Targetvalue == 0.0 || !values.Targetvalue) {
+        errors.Targetvalue = "Please enter Target value";
+      }
+      if (values.Slvalue == 0 || !values.Slvalue) {
+        errors.Slvalue = "Please enter SL value";
+      }
+      if (
+        !values.EntryPrice &&
+        values.EntryPrice != 0 &&
+        showEditModal &&
+        EditDataScalping.ScalpType != "Fixed Price"
+      ) {
+        errors.EntryPrice = "Please enter Entry Price";
+      }
+      if (
+        !values.EntryRange &&
+        values.EntryRange != 0 &&
+        showEditModal &&
+        EditDataScalping.ScalpType != "Fixed Price"
+      ) {
+        errors.EntryRange = "Please enter Entry Range";
+      }
+      if (
+        EditDataScalping.PositionType === "Multiple" &&
+        !values.LowerRange &&
+        values.LowerRange != 0
+      ) {
+        errors.LowerRange = "Please enter Lower Range";
+      }
+      if (
+        EditDataScalping.PositionType === "Multiple" &&
+        !values.HigherRange &&
+        values.HigherRange != 0
+      ) {
+        errors.HigherRange = "Please enter Higher Range";
+      }
+      if (
+        values.HoldExit == "" &&
+        showEditModal &&
+        EditDataScalping.ScalpType != "Fixed Price"
+      ) {
+        errors.HoldExit = "Please select Hold/Exit";
+      }
+
+      if (values.EntryTime == "") {
+        errors.EntryTime = "Please Select Entry Time.";
+      } else if (
+        values.EntryTime <
+        (EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime)
+      ) {
+        errors.EntryTime = `Entry Time Must be After ${
+          EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime
+        }.`;
+      } else if (
+        values.EntryTime >
+        (EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime)
+      ) {
+        errors.EntryTime = `Entry Time Must be Before ${
+          EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime
+        }.`;
+      }
+
+      if (values.ExitTime == "") {
+        errors.ExitTime = "Please Select Exit Time.";
+      } else if (
+        values.ExitTime <
+        (EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime)
+      ) {
+        errors.ExitTime = `Exit Time Must be After ${
+          EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime
+        }.`;
+      } else if (
+        values.ExitTime >
+        (EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime)
+      ) {
+        errors.ExitTime = `Exit Time Must be Before ${
+          EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime
+        }.`;
+      }
+
+      if (
+        values.EntryTime &&
+        values.ExitTime &&
+        values.EntryTime >= values.ExitTime
+      ) {
+        errors.ExitTime = "Exit Time should be greater than Entry Time.";
+      }
+
+      if (!values.TradeCount) {
+        errors.TradeCount = "Please Enter Trade Count.";
+      }
+      if (!values?.RolloverTF && EditDataPattern?.RolloverTF === true) {
+        errors.RolloverDay = "Please Select RollOver";
+      }
+
+      if (
+        !values.RolloverTF &&
+        values.ScalpType == "Multi_Conditional" &&
+        values.PositionType == "Multiple"
+      ) {
+        errors.RolloverTF = "Please Select RollOver";
+      }
+
+      if (
+        !values.RolloverDay &&
+        values.ScalpType == "Multi_Conditional" &&
+        values.PositionType == "Multiple" &&
+        values.RolloverTF == true
+      ) {
+        errors.RolloverDay = "Please Enter No. of Days";
+      }
+
+      if (
+        !values.RolloverTime &&
+        values.ScalpType == "Multi_Conditional" &&
+        values.PositionType == "Multiple" &&
+        values.RolloverTF == true
+      ) {
+        errors.RolloverTime = "Please Enter RollOver Exit Time";
+      }
+
+      if (
+        !values.PEDeepLower &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy") &&
+        values.PEDeepLower == 0
+      ) {
+        errors.PEDeepLower =
+          values.PEDeepLower == 0
+            ? "PE Hedge Lower can not be Zero"
+            : "Please Enter PE Hedge Lower.";
+      }
+
+      if (
+        !values.PEDepthHigher &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy") &&
+        values.PEDepthHigher == 0
+      ) {
+        errors.PEDepthHigher =
+          values.PEDepthHigher == 0
+            ? "PE Main Higher can not be Zero"
+            : "Please Enter PE Main Higher.";
+      }
+
+      if (
+        !values.PEDeepHigher &&
+        values.PEDeepHigher == 0 &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy")
+      ) {
+        errors.PEDeepHigher =
+          values.PEDeepHigher == 0
+            ? "PE Hedge Higher can not be Zero"
+            : "Please Enter PE Hedge Higher.";
+      }
+      if (
+        !values.CEDepthLower &&
+        values.CEDepthLower == 0 &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy")
+      ) {
+        errors.CEDepthLower =
+          values.CEDepthLower == 0
+            ? "CE Main Lower can not be Zero"
+            : "Please Enter CE Main Lower";
+      }
+      if (
+        !values.CEDepthHigher &&
+        values.CEDepthHigher == 0 &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy")
+      ) {
+        errors.CEDepthHigher =
+          values.CEDepthHigher == 0
+            ? "CE Main Higher can not be Zero"
+            : "Please Enter CE Main Higher";
+      }
+      if (
+        !values.PEDepthLower &&
+        values.PEDepthLower == 0 &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy")
+      ) {
+        errors.PEDepthLower =
+          values.PEDepthLower == 0
+            ? "PE Main Lower can not be Zero"
+            : "Please Enter PE Main Lower";
+      }
+      if (
+        !values.CEDeepLower &&
+        values.CEDeepLower == 0 &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy")
+      ) {
+        errors.CEDeepLower =
+          values.CEDeepLower == 0
+            ? "CE Hedge Lower can not be Zero"
+            : "Please Enter CE Hedge Lower";
+      }
+      if (
+        !values.CEDeepHigher &&
+        values.CEDeepHigher == 0 &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy")
+      ) {
+        errors.CEDeepHigher =
+          values.CEDeepHigher == 0
+            ? "CE Hedge Higher can not be Zero"
+            : "Please Enter CE Hedge Higher";
+      }
+      if (
+        !values.PEDeepHigher &&
+        values.PEDeepHigher == 0 &&
+        (values.Strategy == "ShortFourLegStretegy" ||
+          values.Strategy == "LongFourLegStretegy")
+      ) {
+        errors.PEDeepHigher =
+          values.PEDeepHigher == 0
+            ? "PE Hedge Higher can not be Zero"
+            : "Please Enter PE Hedge Higher";
+      }
+
+      if (
+        (EditDataScalping.Targetselection == "Entry Wise SL" &&
+          values.FinalTarget == undefined) ||
+        (values.FinalTarget == "" &&
+          formik.values.FixedSM == "Multiple" &&
+          formik.values.Strategy == "Multi_Conditional" &&
+          formik.values.Targetselection == "Entry Wise SL")
+      ) {
+        errors.FinalTarget = "Please Enter Final Target Price";
+      }
+
+      if (!values.TradeExecution || values.TradeExecution == 0) {
+        errors.TradeExecution = "Please Select Trade Execution.";
+      }
+
+      return errors;
+    },
+    onSubmit: async (values) => {
+      const req = {
+        Dataid: EditDataScalping?._id,
+
+        MainStrategy: "NewScalping", // str
+        Strategy: values.Strategy || EditDataScalping.Targetselection,
+        Symbol: values.Symbol || EditDataScalping.Symbol, // str
+        Username: userName, // str
+        ETPattern: values.ETPattern || EditDataScalping.TType, // str (Trade type)
+        Timeframe: "", // str
+        Targetvalue:
+          parseFloat(values.Targetvalue) ||
+          parseFloat(EditDataScalping["Booking Point"]), // float
+        Slvalue: parseFloat(values.Slvalue), // float
+        TStype:
+          EditDataScalping.ScalpType != "Fixed Price"
+            ? values.TStype
+            : EditDataScalping.TStype, // str
+        LowerRange: values.LowerRange || 0.0, // float (Profit in scalping)
+        HigherRange: values.HigherRange || 0.0, // float (Loss in scalping)
+        HoldExit: values.HoldExit || EditDataScalping.HoldExit || "HoldExit", // str
+        EntryPrice:
+          values.EntryPrice || parseFloat(EditDataScalping.EntryPrice) || 0.0, // float
+        EntryRange:
+          values.EntryRange || parseFloat(EditDataScalping.EntryRange) || 0.0, // float
+        EntryTime: values.EntryTime || EditDataScalping.EntryTime, // str
+        ExitTime: values.ExitTime || EditDataScalping?.ExitTime, // str
+        ExitDay: values.ExitDay || EditDataScalping.ExitDay || "", // str
+        TradeExecution:
+          values.TradeExecution || EditDataScalping.TradeExecution, // str
+        Group: values.Group || EditDataScalping.GroupN || "", // str
+        FinalTarget:
+          values.FinalTarget || parseFloat(EditDataScalping.FinalTarget),
+        // Depth values for CE and PE options
+        CEDepthLower: 0.0, // float
+        CEDepthHigher: 0.0, // float
+        PEDepthLower: 0.0, // float
+        PEDepthHigher: 0.0, // float
+        CEDeepLower: 0.0, // float
+        CEDeepHigher: 0.0, // float
+        PEDeepLower: 0.0, // float
+        PEDeepHigher: 0.0, // float
+        DepthofStrike: 0.0, // float
+
+        TradeCount:
+          values.TargetExit == "true" || values.TargetExit == true
+            ? values.TradeCount || EditDataScalping.TradeCount || 0
+            : 1, // int
+
+        // Additional trade parameters
+        tgp2: values.tgp2 || EditDataScalping["Booking Point 2"] || 0.0,
+        tgp3: values.tgp3 || EditDataScalping["Booking Point 3"] || 0.0,
+        RolloverTF: values.RolloverTF || EditDataScalping.RolloverTF, // bool
+        RolloverDay: values.RolloverDay || EditDataScalping.RolloverDay, // str
+        RolloverTime: values.RolloverTime || EditDataScalping.RolloverTime, // str
+        TargetExit: values.TargetExit, // bool
+        RepeatationCount:
+          values.RepeatationCount || EditDataScalping.RepeatationCount || 0, // int
+        Profit: values.Profit || EditDataScalping.Profit || 0.0, // float
+        Loss: values.Loss || EditDataScalping.Loss || 0.0, // float
+        TradeExecution:
+          values.TradeExecution || EditDataScalping.TradeExecution, // str
+        WorkingDay:
+          values.WorkingDay?.map((day) => day?.value || day) ||
+          formik?.values?.WorkingDay?.map((day) => day?.value || day) ||
+          [],
+      };
+      if (
+        Number(values.EntryPrice) > 0 &&
+        Number(values.EntryRange) &&
+        Number(values.EntryPrice) >= Number(values.EntryRange)
+      ) {
+        return SweentAlertFun(
+          showEditModal && EditDataScalping.ScalpType == "Fixed Price"
+            ? "Higher Price should be greater than Lower Price"
+            : "First Trade Higher Range should be greater than First Trade Lower Range"
+        );
+      }
+
+      if (
+        Number(values.LowerRange) > 0 &&
+        Number(values.HigherRange) > 0 &&
+        Number(values.LowerRange) >= Number(values.HigherRange)
+      ) {
+        return SweentAlertFun(
+          "Higher Range should be greater than Lower Range"
+        );
+      }
+
+      if (
+        EditDataScalping.ScalpType == "Fixed Price" &&
+        Number(values.Targetvalue) <= Number(values.Slvalue)
+      ) {
+        return SweentAlertFun("Target Price should be greater than Stoploss");
+      }
+
+      if (
+        EditDataScalping.ScalpType == "Fixed Price" &&
+        Number(values.Targetvalue) <= Number(values.EntryRange)
+      ) {
+        return SweentAlertFun(
+          "Target Price should be greater than Higher price"
+        );
+      }
+
+      if (
+        EditDataScalping.ScalpType == "Fixed Price" &&
+        Number(values.Slvalue) >= Number(values.EntryPrice)
+      ) {
+        return SweentAlertFun("Lower Price should be greater than Stoploss");
+      }
+
+      if (values.EntryTime >= values.ExitTime) {
+        return SweentAlertFun("Exit Time should be greater than Entry Time");
+      }
+
+      await UpdateUserScript(req).then((response) => {
+        if (response.Status) {
+          Swal.fire({
+            title: "Updated",
+            text: response.message,
+            icon: "success",
+            timer: 1500,
+            timerProgressBar: true,
+          });
+          setTimeout(() => {
+            setShowEditModal(false);
+            formik.resetForm();
+          }, 1500);
+        } else {
+          Swal.fire({
+            title: "Error !",
+            text: response.message,
+            icon: "error",
+            timer: 1500,
+            timerProgressBar: true,
+          });
+        }
+      });
+    },
   });
 
   useEffect(() => {
@@ -135,7 +589,7 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
   }, [getAddScript]);
 
   const showLivePrice = async () => {
-    connectWebSocket(null,channelList, (data) => {
+    connectWebSocket(null, channelList, (data) => {
       if (data.lp && data.tk) {
         $(".LivePrice_" + data.tk).html(data.lp);
       }
@@ -979,7 +1433,6 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
   };
 
   const AddScript = (data) => {
-
     if (data === "ChartingPlatform") {
       if (
         allScripts2?.data?.[allScripts2.len]?.CombineChartingSignal?.length >= 1
@@ -1144,448 +1597,6 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
       });
   };
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      MainStrategy: "", // str
-      Strategy: "", // str
-      Symbol: "", // str
-      Username: "", // str
-      ETPattern: "", // str (Trade type)
-      Timeframe: "", // str
-      Targetvalue: 0.0, // float
-      Slvalue: 0.0, // float
-      TStype: "", // str
-      LowerRange: 0.0, // float (Profit in scalping)
-      HigherRange: 0.0, // float (Loss in scalping)
-      HoldExit: "", // str
-      EntryPrice: 0.0, // float
-      EntryRange: 0.0, // float
-      EntryTime: "",
-      ExitTime: "",
-      FinalTarget: 0.0,
-
-      ExitDay: "", // str
-      TradeExecution: "", // str
-      Group: "", // str
-
-      // Depth values for CE and PE options
-      CEDepthLower: 0.0, // float
-      CEDepthHigher: 0.0, // float
-      PEDepthLower: 0.0, // float
-      PEDepthHigher: 0.0, // float
-      CEDeepLower: 0.0, // float
-      CEDeepHigher: 0.0, // float
-      PEDeepLower: 0.0, // float
-      PEDeepHigher: 0.0, // float
-      DepthofStrike: 0.0, // float
-      TradeCount: 0, // int
-
-      // Additional trade parameters
-      tgp2: 0.0, // float
-      tgp3: 0.0, // float
-      RolloverTF: false, // bool
-      RolloverDay: "", // str
-      RolloverTime: "", // str
-      TargetExit: false, // bool
-      RepeatationCount: 0, // int
-      Profit: 0.0, // float
-      Loss: 0.0, // float
-      TradeExecution: "",
-      WorkingDay: [],
-    },
-    validate: (values) => {
-      let errors = {};
-      const mcxMaxTime = "23:29:59";
-      const mcxMinTime = "08:59:59";
-      const maxTime = "15:29:59";
-      const minTime = "09:15:00";
-
-      if (
-        values.TStype == "" &&
-        showEditModal &&
-        EditDataScalping.ScalpType != "Fixed Price"
-      ) {
-        errors.TStype = "Please select Measurement Type";
-      }
-
-      if (values.Targetvalue == 0.0 || !values.Targetvalue) {
-        errors.Targetvalue = "Please enter Target value";
-      }
-      if (values.Slvalue == 0 || !values.Slvalue) {
-        errors.Slvalue = "Please enter SL value";
-      }
-      if (
-        !values.EntryPrice &&
-        values.EntryPrice != 0 &&
-        showEditModal &&
-        EditDataScalping.ScalpType != "Fixed Price"
-      ) {
-        errors.EntryPrice = "Please enter Entry Price";
-      }
-      if (
-        !values.EntryRange &&
-        values.EntryRange != 0 &&
-        showEditModal &&
-        EditDataScalping.ScalpType != "Fixed Price"
-      ) {
-        errors.EntryRange = "Please enter Entry Range";
-      }
-      if (
-        EditDataScalping.PositionType === "Multiple" &&
-        !values.LowerRange &&
-        values.LowerRange != 0
-      ) {
-        errors.LowerRange = "Please enter Lower Range";
-      }
-      if (
-        EditDataScalping.PositionType === "Multiple" &&
-        !values.HigherRange &&
-        values.HigherRange != 0
-      ) {
-        errors.HigherRange = "Please enter Higher Range";
-      }
-      if (
-        values.HoldExit == "" &&
-        showEditModal &&
-        EditDataScalping.ScalpType != "Fixed Price"
-      ) {
-        errors.HoldExit = "Please select Hold/Exit";
-      }
-
-      if (values.EntryTime == "") {
-        errors.EntryTime = "Please Select Entry Time.";
-      } else if (
-        values.EntryTime <
-        (EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime)
-      ) {
-        errors.EntryTime = `Entry Time Must be After ${
-          EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime
-        }.`;
-      } else if (
-        values.EntryTime >
-        (EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime)
-      ) {
-        errors.EntryTime = `Entry Time Must be Before ${
-          EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime
-        }.`;
-      }
-
-      if (values.ExitTime == "") {
-        errors.ExitTime = "Please Select Exit Time.";
-      } else if (
-        values.ExitTime <
-        (EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime)
-      ) {
-        errors.ExitTime = `Exit Time Must be After ${
-          EditDataScalping.Exchange === "MCX" ? mcxMinTime : minTime
-        }.`;
-      } else if (
-        values.ExitTime >
-        (EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime)
-      ) {
-        errors.ExitTime = `Exit Time Must be Before ${
-          EditDataScalping.Exchange === "MCX" ? mcxMaxTime : maxTime
-        }.`;
-      }
-
-      if (
-        values.EntryTime &&
-        values.ExitTime &&
-        values.EntryTime >= values.ExitTime
-      ) {
-        errors.ExitTime = "Exit Time should be greater than Entry Time.";
-      }
-
-      if (!values.TradeCount) {
-        errors.TradeCount = "Please Enter Trade Count.";
-      }
-      if (!values?.RolloverTF && EditDataPattern?.RolloverTF === true) {
-        errors.RolloverDay = "Please Select RollOver";
-      }
-
-      if (
-        !values.RolloverTF &&
-        values.ScalpType == "Multi_Conditional" &&
-        values.PositionType == "Multiple"
-      ) {
-        errors.RolloverTF = "Please Select RollOver";
-      }
-
-      if (
-        !values.RolloverDay &&
-        values.ScalpType == "Multi_Conditional" &&
-        values.PositionType == "Multiple" &&
-        values.RolloverTF == true
-      ) {
-        errors.RolloverDay = "Please Enter No. of Days";
-      }
-
-      if (
-        !values.RolloverTime &&
-        values.ScalpType == "Multi_Conditional" &&
-        values.PositionType == "Multiple" &&
-        values.RolloverTF == true
-      ) {
-        errors.RolloverTime = "Please Enter RollOver Exit Time";
-      }
-
-      if (
-        !values.PEDeepLower &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy") &&
-        values.PEDeepLower == 0
-      ) {
-        errors.PEDeepLower =
-          values.PEDeepLower == 0
-            ? "PE Hedge Lower can not be Zero"
-            : "Please Enter PE Hedge Lower.";
-      }
-
-      if (
-        !values.PEDepthHigher &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy") &&
-        values.PEDepthHigher == 0
-      ) {
-        errors.PEDepthHigher =
-          values.PEDepthHigher == 0
-            ? "PE Main Higher can not be Zero"
-            : "Please Enter PE Main Higher.";
-      }
-
-      if (
-        !values.PEDeepHigher &&
-        values.PEDeepHigher == 0 &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy")
-      ) {
-        errors.PEDeepHigher =
-          values.PEDeepHigher == 0
-            ? "PE Hedge Higher can not be Zero"
-            : "Please Enter PE Hedge Higher.";
-      }
-      if (
-        !values.CEDepthLower &&
-        values.CEDepthLower == 0 &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy")
-      ) {
-        errors.CEDepthLower =
-          values.CEDepthLower == 0
-            ? "CE Main Lower can not be Zero"
-            : "Please Enter CE Main Lower";
-      }
-      if (
-        !values.CEDepthHigher &&
-        values.CEDepthHigher == 0 &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy")
-      ) {
-        errors.CEDepthHigher =
-          values.CEDepthHigher == 0
-            ? "CE Main Higher can not be Zero"
-            : "Please Enter CE Main Higher";
-      }
-      if (
-        !values.PEDepthLower &&
-        values.PEDepthLower == 0 &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy")
-      ) {
-        errors.PEDepthLower =
-          values.PEDepthLower == 0
-            ? "PE Main Lower can not be Zero"
-            : "Please Enter PE Main Lower";
-      }
-      if (
-        !values.CEDeepLower &&
-        values.CEDeepLower == 0 &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy")
-      ) {
-        errors.CEDeepLower =
-          values.CEDeepLower == 0
-            ? "CE Hedge Lower can not be Zero"
-            : "Please Enter CE Hedge Lower";
-      }
-      if (
-        !values.CEDeepHigher &&
-        values.CEDeepHigher == 0 &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy")
-      ) {
-        errors.CEDeepHigher =
-          values.CEDeepHigher == 0
-            ? "CE Hedge Higher can not be Zero"
-            : "Please Enter CE Hedge Higher";
-      }
-      if (
-        !values.PEDeepHigher &&
-        values.PEDeepHigher == 0 &&
-        (values.Strategy == "ShortFourLegStretegy" ||
-          values.Strategy == "LongFourLegStretegy")
-      ) {
-        errors.PEDeepHigher =
-          values.PEDeepHigher == 0
-            ? "PE Hedge Higher can not be Zero"
-            : "Please Enter PE Hedge Higher";
-      }
-
-      if (
-        (EditDataScalping.Targetselection == "Entry Wise SL" &&
-          values.FinalTarget == undefined) ||
-        (values.FinalTarget == "" &&
-          formik.values.FixedSM == "Multiple" &&
-          formik.values.Strategy == "Multi_Conditional" &&
-          formik.values.Targetselection == "Entry Wise SL")
-      ) {
-        errors.FinalTarget = "Please Enter Final Target Price";
-      }
-
-      if (!values.TradeExecution || values.TradeExecution == 0) {
-        errors.TradeExecution = "Please Select Trade Execution.";
-      }
-
-      return errors;
-    },
-    onSubmit: async (values) => {
-      const req = {
-        MainStrategy: "NewScalping", // str
-        Strategy: values.Strategy || EditDataScalping.Targetselection,
-        Symbol: values.Symbol || EditDataScalping.Symbol, // str
-        Username: userName, // str
-        ETPattern: values.ETPattern || EditDataScalping.TType, // str (Trade type)
-        Timeframe: "", // str
-        Targetvalue:
-          parseFloat(values.Targetvalue) ||
-          parseFloat(EditDataScalping["Booking Point"]), // float
-        Slvalue: parseFloat(values.Slvalue), // float
-        TStype:
-          EditDataScalping.ScalpType != "Fixed Price"
-            ? values.TStype
-            : EditDataScalping.TStype, // str
-        LowerRange: values.LowerRange || 0.0, // float (Profit in scalping)
-        HigherRange: values.HigherRange || 0.0, // float (Loss in scalping)
-        HoldExit: values.HoldExit || EditDataScalping.HoldExit || "HoldExit", // str
-        EntryPrice:
-          values.EntryPrice || parseFloat(EditDataScalping.EntryPrice) || 0.0, // float
-        EntryRange:
-          values.EntryRange || parseFloat(EditDataScalping.EntryRange) || 0.0, // float
-        EntryTime: values.EntryTime || EditDataScalping.EntryTime, // str
-        ExitTime: values.ExitTime || EditDataScalping?.ExitTime, // str
-        ExitDay: values.ExitDay || EditDataScalping.ExitDay || "", // str
-        TradeExecution:
-          values.TradeExecution || EditDataScalping.TradeExecution, // str
-        Group: values.Group || EditDataScalping.GroupN || "", // str
-        FinalTarget:
-          values.FinalTarget || parseFloat(EditDataScalping.FinalTarget),
-        // Depth values for CE and PE options
-        CEDepthLower: 0.0, // float
-        CEDepthHigher: 0.0, // float
-        PEDepthLower: 0.0, // float
-        PEDepthHigher: 0.0, // float
-        CEDeepLower: 0.0, // float
-        CEDeepHigher: 0.0, // float
-        PEDeepLower: 0.0, // float
-        PEDeepHigher: 0.0, // float
-        DepthofStrike: 0.0, // float
-
-        TradeCount: values.TradeCount || EditDataScalping.TradeCount || 0, // int
-
-        // Additional trade parameters
-        tgp2: values.tgp2 || EditDataScalping["Booking Point 2"] || 0.0,
-        tgp3: values.tgp3 || EditDataScalping["Booking Point 3"] || 0.0,
-        RolloverTF: values.RolloverTF || EditDataScalping.RolloverTF, // bool
-        RolloverDay: values.RolloverDay || EditDataScalping.RolloverDay, // str
-        RolloverTime: values.RolloverTime || EditDataScalping.RolloverTime, // str
-        TargetExit: values.TargetExit, // bool
-        RepeatationCount:
-          values.RepeatationCount || EditDataScalping.RepeatationCount || 0, // int
-        Profit: values.Profit || EditDataScalping.Profit || 0.0, // float
-        Loss: values.Loss || EditDataScalping.Loss || 0.0, // float
-        TradeExecution:
-          values.TradeExecution || EditDataScalping.TradeExecution, // str
-        WorkingDay:
-          values.WorkingDay?.map((day) => day?.value || day) ||
-          formik?.values?.WorkingDay?.map((day) => day?.value || day) ||
-          [],
-      };
-      if (
-        Number(values.EntryPrice) > 0 &&
-        Number(values.EntryRange) &&
-        Number(values.EntryPrice) >= Number(values.EntryRange)
-      ) {
-        return SweentAlertFun(
-          showEditModal && EditDataScalping.ScalpType == "Fixed Price"
-            ? "Higher Price should be greater than Lower Price"
-            : "First Trade Higher Range should be greater than First Trade Lower Range"
-        );
-      }
-
-      if (
-        Number(values.LowerRange) > 0 &&
-        Number(values.HigherRange) > 0 &&
-        Number(values.LowerRange) >= Number(values.HigherRange)
-      ) {
-        return SweentAlertFun(
-          "Higher Range should be greater than Lower Range"
-        );
-      }
-
-      if (
-        EditDataScalping.ScalpType == "Fixed Price" &&
-        Number(values.Targetvalue) <= Number(values.Slvalue)
-      ) {
-        return SweentAlertFun("Target Price should be greater than Stoploss");
-      }
-
-      if (
-        EditDataScalping.ScalpType == "Fixed Price" &&
-        Number(values.Targetvalue) <= Number(values.EntryRange)
-      ) {
-        return SweentAlertFun(
-          "Target Price should be greater than Higher price"
-        );
-      }
-
-      if (
-        EditDataScalping.ScalpType == "Fixed Price" &&
-        Number(values.Slvalue) >= Number(values.EntryPrice)
-      ) {
-        return SweentAlertFun("Lower Price should be greater than Stoploss");
-      }
-
-      if (values.EntryTime >= values.ExitTime) {
-        return SweentAlertFun("Exit Time should be greater than Entry Time");
-      }
-
-      await UpdateUserScript(req).then((response) => {
-        if (response.Status) {
-          Swal.fire({
-            title: "Updated",
-            text: response.message,
-            icon: "success",
-            timer: 1500,
-            timerProgressBar: true,
-          });
-          setTimeout(() => {
-            setShowEditModal(false);
-            formik.resetForm();
-          }, 1500);
-        } else {
-          Swal.fire({
-            title: "Error !",
-            text: response.message,
-            icon: "error",
-            timer: 1500,
-            timerProgressBar: true,
-          });
-        }
-      });
-    },
-  });
-
   const formik1 = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -1717,6 +1728,7 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
     },
     onSubmit: async (values) => {
       const req = {
+        Dataid: EditDataOption?._id,
         MainStrategy: data,
         Strategy: EditDataOption.STG,
         Symbol: EditDataOption.MainSymbol,
@@ -1918,6 +1930,7 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
     },
     onSubmit: async (values) => {
       const req = {
+        Dataid: EditDataPattern?._id,
         MainStrategy: data,
         Strategy: EditDataPattern.TradePattern,
         Symbol: EditDataPattern.Symbol,
@@ -2000,9 +2013,9 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
       showWhen: () =>
         showEditModal &&
         EditDataScalping.PositionType === "Multiple" &&
-        formik.values.TargetExit == "true",
-      col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
-      iconText: text.Trade_Count,
+        formik.values?.TargetExit,
+      col_size: formik.values?.FixedSM == "Multiple" ? 3 : 4,
+
       disable: false,
       hiding: false,
     },
@@ -2539,136 +2552,6 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
     },
   ];
 
-  const RiskManagementArr = [
-    {
-      name: "HoldExit",
-      label: "Hold/Exit",
-      type: "select",
-      options: [
-        { label: "Hold", value: "Hold" },
-        { label: "Exit", value: "Exit" },
-      ],
-      // showWhen: (values) => showEditModal && EditDataScalping.ScalpType != "Fixed Price",
-      showWhen: () =>
-        showEditModal && EditDataScalping.PositionType === "Multiple",
-      label_size: 12,
-      col_size: 4,
-      headingtype: 4,
-      disable: false,
-      hiding: false,
-    },
-
-    {
-      name: "TargetExit",
-      label: "Continue after cycle exit",
-      type: "select",
-      options: [
-        { label: "True", value: true },
-        { label: "False", value: false },
-      ],
-      showWhen: (values) =>
-        showEditModal && EditDataScalping.PositionType === "Multiple",
-
-      label_size: 12,
-      col_size: 4,
-      headingtype: 4,
-      disable: false,
-      // iconText: text.Increment_Type,
-      hiding: false,
-    },
-
-    {
-      name: "TradeCount",
-      label: "No. of Cycle",
-      type: "text3",
-      label_size: 12,
-      headingtype: 4,
-      showWhen: () =>
-        showEditModal &&
-        EditDataScalping.PositionType === "Multiple" &&
-        formik.values.TargetExit == "true",
-      col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
-      iconText: text.Trade_Count,
-      disable: false,
-      hiding: false,
-    },
-
-    {
-      name: "RepeatationCount",
-      label: "Repetition Count",
-      type: "text3",
-      label_size: 12,
-      col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
-      headingtype: 4,
-      showWhen: () =>
-        showEditModal && EditDataScalping.PositionType === "Multiple",
-      disable: false,
-      hiding: false,
-    },
-
-    // {
-    //   name: "HoldExit",
-    //   label: "Hold/Exit",
-    //   type: "select",
-    //   options: [
-    //     { label: "Hold", value: "Hold" },
-    //     { label: "Exit", value: "Exit" },
-    //   ],
-    //   showWhen: () =>
-    //     showEditModal && EditDataScalping.PositionType === "Multiple",
-    //   label_size: 12,
-    //   col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
-    //   headingtype: 4,
-    //   disable: false,
-    //   hiding: false,
-    // },
-
-    {
-      name: "WorkingDay",
-      label: "Working Day",
-      type: "multiselect",
-      options: [
-        { label: "Monday", value: "Monday" },
-        { label: "Tuesday", value: "Tuesday" },
-        { label: "Wednesday", value: "Wednesday" },
-        { label: "Thursday", value: "Thursday" },
-        { label: "Friday", value: "Friday" },
-        { label: "Saturday", value: "Saturday" },
-      ],
-      label_size: 12,
-      col_size: 4,
-      headingtype: 4,
-      showWhen: () => showEditModal,
-      disable: false,
-      hiding: false,
-    },
-
-    {
-      name: "Profit",
-      label: "Max Profit",
-      type: "text3",
-      label_size: 12,
-      col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
-      headingtype: 4,
-      showWhen: () =>
-        showEditModal && EditDataScalping.PositionType === "Multiple",
-      disable: false,
-      hiding: false,
-    },
-    {
-      name: "Loss",
-      label: "Max Loss",
-      type: "text3",
-      label_size: 12,
-      col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
-      headingtype: 4,
-      showWhen: () =>
-        showEditModal && EditDataScalping.PositionType === "Multiple",
-      disable: false,
-      hiding: false,
-    },
-  ];
-
   const TimeDurationArr = [
     {
       name: "EntryTime",
@@ -2862,6 +2745,119 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
     },
   ];
 
+  const RiskManagementArr = [
+    {
+      name: "HoldExit",
+      label: "Hold/Exit",
+      type: "select",
+      options: [
+        { label: "Hold", value: "Hold" },
+        { label: "Exit", value: "Exit" },
+      ],
+      // showWhen: (values) => showEditModal && EditDataScalping.ScalpType != "Fixed Price",
+      showWhen: () =>
+        showEditModal && EditDataScalping.PositionType === "Multiple",
+      label_size: 12,
+      col_size: 4,
+      headingtype: 4,
+      disable: false,
+      hiding: false,
+    },
+
+    {
+      name: "TargetExit",
+      label: "Continue after cycle exit",
+      type: "select",
+      options: [
+        { label: "True", value: true },
+        { label: "False", value: false },
+      ],
+      // showWhen: (values) =>
+      //   showEditModal && EditDataScalping.PositionType === "Multiple",
+
+      label_size: 12,
+      col_size: 4,
+      headingtype: 4,
+      disable: false,
+      // iconText: text.Increment_Type,
+      hiding: false,
+    },
+
+    {
+      name: "TradeCount",
+      label: "No. of Cycle",
+      type: "text3",
+      label_size: 12,
+      headingtype: 4,
+      showWhen: () =>
+        showEditModal &&
+        // EditDataScalping.PositionType === "Multiple" &&
+        (formik.values?.TargetExit === true ||
+          formik.values?.TargetExit === "true"),
+      col_size: formik.values?.FixedSM == "Multiple" ? 3 : 4,
+
+      disable: false,
+      hiding: false,
+    },
+
+    {
+      name: "RepeatationCount",
+      label: "Repetition Count",
+      type: "text3",
+      label_size: 12,
+      col_size: formik.values?.FixedSM == "Multiple" ? 3 : 4,
+      headingtype: 4,
+      showWhen: () =>
+        showEditModal && EditDataScalping?.PositionType === "Multiple",
+      disable: false,
+      hiding: false,
+    },
+
+    {
+      name: "WorkingDay",
+      label: "Working Day",
+      type: "multiselect",
+      options: [
+        { label: "Monday", value: "Monday" },
+        { label: "Tuesday", value: "Tuesday" },
+        { label: "Wednesday", value: "Wednesday" },
+        { label: "Thursday", value: "Thursday" },
+        { label: "Friday", value: "Friday" },
+        { label: "Saturday", value: "Saturday" },
+      ],
+      label_size: 12,
+      col_size: 4,
+      headingtype: 4,
+      showWhen: () => showEditModal,
+      disable: false,
+      hiding: false,
+    },
+
+    {
+      name: "Profit",
+      label: "Max Profit",
+      type: "text3",
+      label_size: 12,
+      col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
+      headingtype: 4,
+      showWhen: () =>
+        showEditModal && EditDataScalping.PositionType === "Multiple",
+      disable: false,
+      hiding: false,
+    },
+    {
+      name: "Loss",
+      label: "Max Loss",
+      type: "text3",
+      label_size: 12,
+      col_size: formik.values.FixedSM == "Multiple" ? 3 : 4,
+      headingtype: 4,
+      showWhen: () =>
+        showEditModal && EditDataScalping.PositionType === "Multiple",
+      disable: false,
+      hiding: false,
+    },
+  ];
   const fields = [
     {
       name: "Heading",
@@ -2929,7 +2925,6 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
       disable: false,
     },
   ];
-
   const updatedFields = fields.filter((item) => {
     return item.hiding == false;
   });
@@ -2953,21 +2948,6 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
                 >
                   {data && (
                     <>
-                      {/* <div className="iq-card-header d-flex justify-content-between">
-                        <div className="iq-header-title">
-                        </div> */}
-                        {/* <div className="d-flex justify-content-end">
-                          
-                          <button
-                            className="addbtn mx-2 mt-1"
-                            onClick={() => AddScript(data)}
-                          >
-                            {data === "ChartingPlatform"
-                              ? "Signals"
-                              : "Add Script"}
-                          </button>
-                        </div> */}
-                      {/* </div> */}
                       <div className="iq-card-body" style={{ padding: "3px" }}>
                         {data !== "ChartingPlatform" && (
                           <div className="table-responsive">
@@ -2977,9 +2957,9 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
                               <>
                                 {view === "table" ? (
                                   (data === "Scalping" &&
-                                    getAllService.NewScalping?.length > 0) ||  (
+                                    getAllService.NewScalping?.length > 0) ||
                                   data === "GoldenStrategy" ||
-                                  data === "Golden Strategy" &&
+                                  (data === "Golden Strategy" &&
                                     getGoldenStrategy?.length > 0) ||
                                   (data === "Option Strategy" &&
                                     getAllService.OptionData?.length > 0) ||
@@ -3114,7 +3094,7 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
                   }}
                 />
               </div>
-              {data == "Scalping" ? (
+              {data == "Scalping" && formik.values ? (
                 <>
                   <div className="p-4">
                     <Formikform
@@ -3130,7 +3110,7 @@ const Coptyscript = ({ tableType, data, selectedType, FromDate, ToDate,getAddScr
                     />
                   </div>
                 </>
-              ) : data == "Option Strategy" ? (
+              ) : data == "Option Strategy" && formik1 ? (
                 <>
                   <div className="p-4">
                     <Formikform

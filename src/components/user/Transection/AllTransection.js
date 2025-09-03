@@ -324,11 +324,11 @@ const Clientservice = () => {
                             >
                                 Add Money
                             </button>
-                            <button to='/admin/adduser' className='addbtn'
+                            {/* <button to='/admin/adduser' className='addbtn'
                                 onClick={() => setShowWithdrawalModal(true)}
                             >
                                 Withdraw Amount
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                     <FullDataTable columns={columns} data={AllTransectionData} checkBox={false} />
