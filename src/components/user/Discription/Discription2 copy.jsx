@@ -197,8 +197,8 @@ const DescriptionPage = () => {
       Page_title={"📄 Description"}
       button_status={false}
       backbutton_status={true}>
-      <div className="desc-page-wrapper card-bg-color">
-        <div className=" card-bg-color">
+      <div className="desc-page-wrapper ">
+        <div className=" ">
           {/* Tab Navigation */}
           <ul className="nav nav-tabs justify-content-center border-bottom rounded-0 p-1 mb-3">
             {TABS.map((tab) => (
@@ -214,16 +214,16 @@ const DescriptionPage = () => {
             ))}
           </ul>
 
-          <div className="mt-3 card-bg-color">
+          <div className="mt-3">
             {/* Scalping Tab Content */}
             {activeTab === "Scalping" && (
               <div className="scalping-content">
                 <h5 className="desc-heading">Scalping Options</h5>
-                <div className="desc-btn-group">
+                <div className="desc-btn-group nav nav-pills shadow rounded-pill p-1 d-flex flex-wrap mb-0">
                   {["Single", "Multiple"].map((option) => (
                     <button
                       key={option}
-                      className={`btn btn-outline-primary ${scalpingOption === option ? "active" : ""
+                      className={` nav-link  rounded-pill mx-lg-3 ${scalpingOption === option ? "active" : ""
                         }`}
                       onClick={() => handleScalpingChange(option)}
                     >
@@ -232,7 +232,7 @@ const DescriptionPage = () => {
                   ))}
                 </div>
                 <div className="desc-details mt-3">
-                  <div className="desc-card card-bg-color">
+                  <div className="desc-card ">
                     <p className="desc-text">
                       <strong className="card-text-Color">Position Type:</strong>{" "}
                       <span style={{ fontSize: '14px' }}>{description?.[0]?.PositionType}</span>

@@ -1056,7 +1056,7 @@ const Userdashboard = () => {
         >
           <li className="nav-item" role="presentation">
             <a
-              className={`nav-link d-flex align-items-center gap-8 me-5 ${
+              className={`nav-link d-flex align-items-center gap-8 mx-lg-5 ${
                 activeTab1 === "CurrentPosition" ? "active" : ""
               }`}
               id="home-tab-justify"
@@ -1112,7 +1112,7 @@ const Userdashboard = () => {
                   className="d-flex justify-content-center align-items-center w-100"
                   style={{ maxWidth: "1200px" }}
                 >
-                  <div className="d-flex align-items-center gap-3">
+                  <div className="d-lg-flex align-items-center gap-3">
                     <ul className="nav nav-pills shadow rounded-pill p-1 d-flex flex-wrap mb-0">
                       {strategyType.map((type, index) => (
                         <li className="nav-item" key={index}>

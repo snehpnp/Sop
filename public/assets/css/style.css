@@ -7336,7 +7336,7 @@ height: auto;
 .desc-page-wrapper {
   width: 100%;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: #fff;
 }
 
 .desc-container {
@@ -9264,3 +9264,4 @@ text-transform: capitalize !important;
     border-top-right-radius: 10px;
 
 }
+

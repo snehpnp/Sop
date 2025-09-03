@@ -85,6 +85,7 @@ const Header = ({ permissionData }) => {
   const niftyRef = useRef(null);
   const bankNiftyRef = useRef(null);
 
+  
   const handleBroker = async () => {
     setShowApiStepsModal(true);
   };
@@ -1487,6 +1488,43 @@ const Header = ({ permissionData }) => {
                   ) : (
                     <></>
                   )}
+<li className="nav-item dropdown">
+  <a
+    href="#"
+    className="nav-link dropdown-toggle d-flex align-items-center"
+    id="priceDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    📈 Live Prices
+  </a>
+
+  <ul
+    className="dropdown-menu dropdown-menu-end shadow-sm"
+    aria-labelledby="priceDropdown"
+    style={{ minWidth: "180px" }}
+  >
+    <li>
+      <div className="dropdown-item d-flex justify-content-between">
+        <span>NIFTY:</span>
+        <span ref={niftyRef} className="fw-bold text-success"></span>
+      </div>
+    </li>
+    <li>
+      <div className="dropdown-item d-flex justify-content-between">
+        <span>BANKNIFTY:</span>
+        <span ref={bankNiftyRef} className="fw-bold text-success"></span>
+      </div>
+    </li>
+    <li>
+      <div className="dropdown-item d-flex justify-content-between">
+        <span>FINNIFTY:</span>
+        <span className="fw-bold text-success"></span>
+      </div>
+    </li>
+  </ul>
+</li>
 
                   <li className="live-price-item">
                     <div className="live-price-box">

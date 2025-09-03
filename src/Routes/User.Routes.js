@@ -48,6 +48,7 @@ const UserRoute = ({ permissionData }) => {
           <div id="content-page" className="content-page">
             <Header permissionData={permissionData} />
             <Routes>
+              
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/plans" element={<MyPlans />} />
