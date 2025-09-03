@@ -48,8 +48,8 @@ const style = {
   bgcolor: "background.paper",
   borderRadius: 2,
   boxShadow: 24,
-  p: 4,
-  padding: 4,
+  p: 4 ,
+  padding: 5,
 };
 
 const ServicesList = () => {
@@ -714,6 +714,11 @@ const ServicesList = () => {
       button_status={false}
       backbutton_status={false}
     >
+     <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item active" aria-current="page">All Plans</li>
+        </ol>
+      </nav>
       <div className="">
         {expire?.includes(1) ? (
           <div className="col-lg-9">
@@ -752,9 +757,9 @@ const ServicesList = () => {
               },
             }}
           >
-            <Tab label="📊 SOP" value="1" />
-            <Tab label="⚡ Charting" value="2" />
-            {hasPurchasedSOP && <Tab label="💰 AddOn" value="3" />}
+            <Tab label=" SOP" value="1" />
+            <Tab label=" Charting" value="2" />
+            {hasPurchasedSOP && <Tab label=" AddOn" value="3" />}
           </Tabs>
         </div>
 
@@ -1223,6 +1228,7 @@ const ServicesList = () => {
         className="coupon-modal"
       >
         <Box sx={style}>
+          <div className="p-4 plan-modal shadow">
           {/* Close Button */}
           <Button
             onClick={handleClose}
@@ -1257,8 +1263,8 @@ const ServicesList = () => {
               value={couponCode}
               onChange={(e) => {
                 setCouponCode(e.target.value);
-                setVerificationMessage(""); // Clear message on input change
-                setIsContinueEnabled(false); // Disable "Continue" button on input change
+                setVerificationMessage(""); 
+                setIsContinueEnabled(false);
               }}
             />
             <Button variant="outlined" onClick={handleVerify}>
@@ -1291,13 +1297,14 @@ const ServicesList = () => {
             ) : (
               <button
                 variant="text"
-                className="addbtn border card-text-Color"
+                className="addbtn border "
                 onClick={handleContinueWithout}
               >
                 Continue without Coupon
               </button>
             )}
           </Stack>
+          </div>
         </Box>
       </Modal>
 
