@@ -1,127 +1,147 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Formik, Form, Field } from "formik";
 import Select from "react-select";
 import {
   GET_EXPIRY_DATE,
   Get_Symbol,
+  GetExchange,
+  getKeyForAdmin,
   TradeExecutionAPI,
 } from "../../CommonAPI/Admin";
 import "./OptionChainForm.css";
 import Content from "../../../ExtraComponent/Content";
-import { Get_All_Buyed_Plans, GetStrikeToken } from "../../CommonAPI/User";
+import {
+  GetStrikeToken,
+  getSessionId,
+  Get_All_Buyed_Plans
+} from "../../CommonAPI/User";
 import { connectWebSocket } from "../../user/UserDashboard/LivePrice";
 import $ from "jquery";
 import Table from "react-bootstrap/Table";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
+import qs from "qs";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 let TargetTypeArr = [
   { value: "POINT", label: "POINT" },
   { value: "PERCENT", label: "PERCENT" },
 ];
-
-const exchangeOptions = [
-    { value: "NFO", label: "NFO" },
-    { value: "MCX", label: "MCX" },
-  ];
-
-
 const OptionChainForm = () => {
   const [symbol, setSymbol] = useState([]);
   const [expiry, setExpiry] = useState([]);
-  const [strikeToken, setStrikeToken] = useState([]);
+  let [strikeToken, setStrikeToken] = useState([]);
   const [formValues, setFormValues] = useState({
     exchange: "NFO",
     instrument: "",
     symbol: "",
     expiryDate: "",
-    planname: "",
+    planName: "",
     target: "",
     stoploss: "",
     TargetType: "POINT",
   });
+
+  const [exchangeOptions, setExchangeOptions] = useState([]);
+  const [livePrices, setLivePrices] = useState({}); // Current prices
+  const [priceChanges, setPriceChanges] = useState({}); // Price change indicators
+  const priceTimeouts = useRef({}); // To clear price change indicators after delay
+
   const UserName = localStorage.getItem("name");
+  const Role = localStorage.getItem("Role");
   const [planNames, setPlanNames] = useState([]);
-  const [keyInput, setKeyInput] = useState(""); // State for Key Input
+  const [keyInput, setKeyInput] = useState("");
+  const [AliceTokenCreated, setAliceTokenCreated] = useState({});
 
-   useEffect(() => {
-    getAllPlans();
-    const initializeDefaults = async () => {
-      const firstExchange = "NFO"; // Default exchange
-      const firstInstrument = getInstrumentOptions(firstExchange)[0]?.value;
+  // Optimized price update function with memoization
+  const updatePriceDisplay = useCallback((token, newPrice) => {
+    const priceFloat = parseFloat(newPrice);
 
-      if (firstInstrument) {
-        const req = { exchange: firstExchange, instrument: firstInstrument };
-        const symbolResponse = await Get_Symbol(req);
+    setLivePrices((prev) => {
+      const currentPrice = prev[token];
+      const previousPrice = currentPrice || priceFloat;
 
-        if (symbolResponse?.Symbol?.length > 0) {
-          const firstSymbol = symbolResponse.Symbol[0];
-          const expiryResponse = await GET_EXPIRY_DATE({
-            Exchange: firstExchange,
-            Instrument: firstInstrument,
-            Symbol: firstSymbol,
-            Strike: "",
-          });
+    
 
-          if (expiryResponse["Expiry Date"]?.length > 0) {
-            const firstExpiry = expiryResponse["Expiry Date"][0];
-
-            setFormValues({
-              exchange: firstExchange,
-              instrument: firstInstrument,
-              symbol: firstSymbol,
-              expiryDate: firstExpiry,
-              planname: "",
-            });
-
-            setSymbol(symbolResponse.Symbol);
-            setExpiry(expiryResponse["Expiry Date"]);
-          }
+      // Determine price movement
+      let movement = "none";
+      if (currentPrice !== undefined) {
+        if (priceFloat > currentPrice) {
+          movement = "up";
+        } else if (priceFloat < currentPrice) {
+          movement = "down";
         }
       }
-    };
 
-    initializeDefaults();
+      // Update price change indicators
+      if (movement !== "none") {
+        setPriceChanges((prevChanges) => ({
+          ...prevChanges,
+          [token]: movement,
+        }));
+
+        // Clear the price change indicator after 2 seconds
+        if (priceTimeouts.current[token]) {
+          clearTimeout(priceTimeouts.current[token]);
+        }
+
+        // priceTimeouts.current[token] = setTimeout(() => {
+        //   setPriceChanges((prevChanges) => {
+        //     const newChanges = { ...prevChanges };
+        //     delete newChanges[token];
+        //     return newChanges;
+        //   });
+        // }, 2000);
+      }
+
+      return {
+        ...prev,
+        [token]: priceFloat,
+      };
+    });
   }, []);
 
-  useEffect(() => {
-    fetchStrikeToken(formValues);
-  }, [formValues]);
+  // Optimized WebSocket connection
+  const showLivePrice = useCallback(
+    async (channelList) => {
+      connectWebSocket(AliceTokenCreated, channelList, (data) => {
+        if (data.lp && data.tk) {
+          updatePriceDisplay(data.tk, data.lp);
 
+          // Still update jQuery elements for backward compatibility
+          $(".LivePrice_" + data.tk).html(data.lp);
+          if (data.v) {
+            let volInLakh = (data.v / 100000).toFixed(1);
+            $(".volume_" + data.tk).html(volInLakh + "L");
+          }
 
-
-  const showLivePrice = async (channelList) => {
-    connectWebSocket(null, channelList, (data) => {
-      if (data.lp && data.tk) {
-        let LivePrice = $(".LivePrice_" + data.tk).html(data.lp);
-        if (data.v) {
-          let volInLakh = (data.v / 100000).toFixed(1);
-          $(".volume_" + data.tk).html(volInLakh + "L");
+          // ✅ Change % Red/Green
+          if (data.pc) {
+            $(".pc_" + data.tk).html(data.pc + "%");
+            $(".pc_" + data.tk).css("color", data.pc >= 0 ? "green" : "red");
+          }
         }
+      });
+    },
+    [updatePriceDisplay]
+  );
 
-        // ✅ Change % Red/Green
-        if (data.pc) {
-          $(".pc_" + data.tk).html(data.pc + "%");
-          $(".pc_" + data.tk).css("color", data.pc >= 0 ? "green" : "red");
-        }
-      }
-    });
-  };
-
-  const getAllPlans = async () => {
+ const getAllPlans = async () => {
     try {
       const res = await Get_All_Buyed_Plans({ userName: UserName });
       if (res.Status) {
+    
         const uniquePlanNames = [
           ...new Set(
             res?.Allotplan.filter(
               (item) => item.ChartingSignal && item.ChartingSignal.length > 0
-            ).map((item) => item.Planname)
+            ).map((item) => ({ ...item, name: item?.Planname}))
           ),
         ];
+
         setPlanNames(uniquePlanNames);
       } else {
         setPlanNames([]);
@@ -130,6 +150,43 @@ const OptionChainForm = () => {
       console.error("Error fetching plans:", error);
     }
   };
+
+
+
+
+  const getSessionIdFromAPI = async () => {
+    try {
+      const response = await getSessionId();
+      setAliceTokenCreated({
+        userId: response.Userid,
+        sessionId: response.Access_Token,
+      });
+    } catch (error) {
+      console.error("Error fetching credentials:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    getSessionIdFromAPI();
+    getAllPlans();
+  }, []);
+
+  useEffect(() => {
+    const initializeDefaults = async () => {
+      const firstExchange = "NFO";
+      setFormValues({
+        exchange: firstExchange,
+        instrument: "",
+        symbol: "",
+        expiryDate: "",
+        planname: "",
+      });
+      setSymbol([]);
+      setExpiry([]);
+    };
+    initializeDefaults();
+  }, []);
 
   const fetchSymbol = async (currentValues) => {
     try {
@@ -149,6 +206,10 @@ const OptionChainForm = () => {
       console.error("Error fetching symbol:", error);
     }
   };
+
+  useEffect(() => {
+    fetchSymbol(formValues);
+  }, [formValues.instrument]);
 
   const FetchExpiry = async (currentValues) => {
     try {
@@ -185,13 +246,46 @@ const OptionChainForm = () => {
 
       const response = await GetStrikeToken(req);
       setStrikeToken(response?.StrikeTokens);
+
+      // Clear previous price data when new strike tokens are loaded
+      setLivePrices({});
+      setPriceChanges({});
+
       const channelList = response.SubscriptionChain;
       showLivePrice(channelList);
     } catch (error) {
       console.error("Error fetching strike token:", error);
     }
   };
-  
+
+  useEffect(() => {
+    fetchStrikeToken(formValues);
+  }, [formValues.symbol, formValues.expiryDate]);
+
+
+  const get_Exchange = async () => {
+    try {
+      const response = await GetExchange();
+      if (response.Status && Array.isArray(response.Exchange)) {
+        const formattedOptions = response.Exchange.filter(
+          (item) => item !== "NSE"
+        ).map((item) => ({
+          value: item,
+          label: item,
+        }));
+        setExchangeOptions(formattedOptions);
+      } else {
+        setExchangeOptions([]);
+      }
+    } catch (err) {
+      setExchangeOptions([]);
+    }
+  };
+
+  useEffect(() => {
+    get_Exchange();
+  }, []);
+
   const getInstrumentOptions = (exchange) => {
     if (exchange === "NFO") {
       return [
@@ -200,10 +294,14 @@ const OptionChainForm = () => {
       ];
     } else if (exchange === "MCX") {
       return [{ value: "OPTFUT", label: "OPTFUT" }];
+    } else if (exchange === "BFO") {
+      return [{ value: "IO", label: "IO" }];
     } else {
       return [];
     }
   };
+
+  const symbolOptions = symbol.map((item) => ({ value: item, label: item }));
 
   const validateFields = () => {
     const requiredFields = {
@@ -212,7 +310,6 @@ const OptionChainForm = () => {
       Symbol: formValues.symbol,
       ExpiryDate: formValues.expiryDate,
       PlanName: formValues.planname,
-      Key: keyInput,
     };
 
     const emptyFields = Object.entries(requiredFields)
@@ -231,55 +328,99 @@ const OptionChainForm = () => {
   };
 
   const excecuteTrade = async (tradeType, type, strike, token) => {
-    if (!validateFields()) return; // Validate fields before proceeding
+    if (!validateFields()) return;
 
     try {
       const exchange = formValues.exchange;
       const symbol = formValues.symbol;
       const planname = formValues.planname;
 
-      let LivePrice = $(".LivePrice_" + token).html();
+      // Use state price instead of jQuery for better performance
+      let livePrice = livePrices[token] || $(".LivePrice_" + token).text();
 
-
-      if(!LivePrice){
-        toast.error("Live Price not available. Please try again.");
+      if (!livePrice || livePrice === "-" || livePrice === 0) {
+        toast.error("Live Price not available for this token");
         return;
       }
 
       const req = {
         Planname: planname,
         Username: UserName,
-        User: "Client",
+        User: Role,
         Optiontype: type,
         Exchange: exchange,
         StrikePrice: strike,
         Expirydate: formValues.expiryDate,
+        StrategyTag: formValues.strategyTag,
         Symbol: symbol,
         TType: tradeType.toUpperCase(),
         Target: formValues.target || 0,
         Sl: formValues.stoploss || 0,
-        Exittime: "15:29:00", // Use formatted Exit Time
+        TargetType: formValues.TargetType || "POINT",
+        Exittime: "15:29:00",
         Ordertype: "Market",
         ETime: "14:04:39",
-        Price:  LivePrice,
-        Key: keyInput, // Pass keyInput here
+        Price: livePrice,
+        Key: keyInput,
         Demo: "Demo",
         DataSource: "Option Chain",
-        TargetType: formValues.TargetType || "POINT",
       };
-      
-      
-      const res = await TradeExecutionAPI(req);
-    
 
-      // Show success toast with API response
+      let data = qs.stringify(req);
+      const res = await TradeExecutionAPI(data);
       toast.success(res.message);
     } catch (error) {
-      console.error("Error fetching live price:", error);
-
-      // Show error toast
+      console.error("Error executing trade:", error);
       toast.error(`Trade Execution Failed`);
     }
+  };
+
+  // Enhanced price display component with color indicators
+  const PriceDisplay = ({ token }) => {
+    const currentPrice = livePrices[token];
+    const priceChange = priceChanges[token];
+
+    const getPriceStyle = () => {
+      const baseStyle = {
+        fontSize: "18px",
+        fontWeight: "600",
+        padding: "2px 8px",
+        borderRadius: "4px",
+        transition: "all 0.3s ease",
+        display: "inline-block",
+        minWidth: "60px",
+        textAlign: "center",
+      };
+
+      if (priceChange === "up") {
+        return {
+          ...baseStyle,
+          backgroundColor: "#d4edda",
+          color: "#155724",
+          border: "1px solid #c3e6cb",
+        };
+      } else if (priceChange === "down") {
+        return {
+          ...baseStyle,
+          backgroundColor: "#f8d7da",
+          color: "#721c24",
+          border: "1px solid #f5c6cb",
+        };
+      }
+
+      return {
+        ...baseStyle,
+        // backgroundColor: "#f8f9fa",
+        color: "#495057",
+        border: "1px solid #dee2e6",
+      };
+    };
+
+    return (
+      <span style={getPriceStyle()}>
+        {currentPrice !== undefined ? currentPrice.toFixed(2) : "-"}
+      </span>
+    );
   };
 
   const OptionChainColumn = [
@@ -293,14 +434,15 @@ const OptionChainForm = () => {
           <>
             <button
               style={{
-               backgroundColor: "green",
+                backgroundColor: "#28a745",
                 color: "white",
-                padding: "4px 10px",
+                padding: "6px 12px",
                 border: "none",
-                borderRadius: "3px",
+                borderRadius: "4px",
                 marginRight: "6px",
-                fontSize: "16px",
+                fontSize: "14px",
                 cursor: "pointer",
+                fontWeight: "500",
               }}
               onClick={() =>
                 excecuteTrade(
@@ -315,14 +457,14 @@ const OptionChainForm = () => {
             </button>
             <button
               style={{
-               
-                  backgroundColor: "red",
+                backgroundColor: "#dc3545",
                 color: "white",
-                padding: "4px 10px",
+                padding: "6px 12px",
                 border: "none",
-                borderRadius: "3px",
-                fontSize: "16px",
+                borderRadius: "4px",
+                fontSize: "14px",
                 cursor: "pointer",
+                fontWeight: "500",
               }}
               onClick={() =>
                 excecuteTrade(
@@ -339,6 +481,7 @@ const OptionChainForm = () => {
         ),
       },
     },
+
     // ✅ Call Side Volume
     {
       name: "CE",
@@ -364,39 +507,39 @@ const OptionChainForm = () => {
     },
     {
       name: "CE",
-      label: "Call",
+      label: "Call Premium",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value) => <PriceDisplay token={value} />,
+      },
+    },
+    {
+      name: "Strike",
+      label: "Strike Price",
       options: {
         filter: true,
         sort: true,
         customBodyRender: (value) => (
-          <>
-            <span
-              className={`LivePrice_${value} LivePirce_fontSize`}
-              style={{ fontSize: "20px" }}
-            >
-              -
-            </span>
-          </>
+          <span
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              color: "#007bff",
+            }}
+          >
+            {value}
+          </span>
         ),
       },
     },
-    { name: "Strike", label: "Strike", options: { filter: true, sort: true } },
     {
       name: "PE",
-      label: "Put",
+      label: "Put Premium",
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value) => (
-          <>
-            <span
-              className={`LivePrice_${value} LivePirce_fontSize`}
-              style={{ fontSize: "20px" }}
-            >
-              -
-            </span>
-          </>
-        ),
+        customBodyRender: (value) => <PriceDisplay token={value} />,
       },
     },
     // ✅ Put Change %
@@ -432,35 +575,15 @@ const OptionChainForm = () => {
           <>
             <button
               style={{
-               backgroundColor: "green",
+                backgroundColor: "#dc3545",
                 color: "white",
-                padding: "4px 10px",
+                padding: "6px 12px",
                 border: "none",
-                borderRadius: "3px",
+                borderRadius: "4px",
+                fontSize: "14px",
+                cursor: "pointer",
                 marginRight: "6px",
-                fontSize: "16px",
-                cursor: "pointer",
-              }}
-              onClick={() =>
-                excecuteTrade(
-                  "Buy",
-                  "PE",
-                  tableMeta.rowData.Strike,
-                  tableMeta.rowData.PE
-                )
-              }
-            >
-              Buy
-            </button>
-            <button
-              style={{
-                 backgroundColor: "red",
-                color: "white",
-                padding: "4px 10px",
-                border: "none",
-                borderRadius: "3px",
-                fontSize: "16px",
-                cursor: "pointer",
+                fontWeight: "500",
               }}
               onClick={() =>
                 excecuteTrade(
@@ -473,12 +596,48 @@ const OptionChainForm = () => {
             >
               Sell
             </button>
+            <button
+              style={{
+                backgroundColor: "#28a745",
+                color: "white",
+                padding: "6px 12px",
+                border: "none",
+                borderRadius: "4px",
+                fontSize: "14px",
+                cursor: "pointer",
+                fontWeight: "500",
+              }}
+              onClick={() =>
+                excecuteTrade(
+                  "Buy",
+                  "PE",
+                  tableMeta.rowData.Strike,
+                  tableMeta.rowData.PE
+                )
+              }
+            >
+              Buy
+            </button>
           </>
         ),
       },
     },
   ];
-  const symbolOptions = symbol.map((item) => ({ value: item, label: item }));
+
+  useEffect(() => {
+    if (formValues.symbol) {
+      FetchExpiry(formValues);
+    }
+  }, [formValues.symbol]);
+
+  // Cleanup timeouts on component unmount
+  useEffect(() => {
+    return () => {
+      Object.values(priceTimeouts.current).forEach((timeout) => {
+        if (timeout) clearTimeout(timeout);
+      });
+    };
+  }, []);
 
   return (
     <Content
@@ -486,90 +645,93 @@ const OptionChainForm = () => {
       button_status={false}
       backbutton_status={true}
     >
-      <Formik initialValues={formValues} onSubmit={(values) => {}}>
+      <Formik
+        initialValues={formValues}
+        enableReinitialize={true}
+        onSubmit={(values) => {
+          // Handle form submission if needed
+        }}
+      >
         {({ values, setFieldValue }) => (
           <Form className="ocf-form">
             <div className="ocf-container-row">
-              {/* Top row with 4 parameters */}
               <div className="ocf-group">
-                <label>Exchange</label>
+                <label className="card-text-Color">Exchange</label>
                 <Select
                   name="exchange"
                   options={exchangeOptions}
-                  value={exchangeOptions.find(
-                    (option) => option.value === formValues.exchange
-                  )}
+                  value={
+                    exchangeOptions.find(
+                      (option) => option.value === values.exchange
+                    ) || null
+                  }
                   onChange={(selectedOption) => {
                     setFieldValue("exchange", selectedOption.value);
-                    const firstInstrument = getInstrumentOptions(
-                      selectedOption.value
-                    )[0]?.value;
-                    setFieldValue("instrument", firstInstrument);
+                    setFieldValue("instrument", "");
+                    setFieldValue("symbol", "");
+                    setFieldValue("expiryDate", "");
                     setFormValues((prev) => ({
                       ...prev,
                       exchange: selectedOption.value,
-                      instrument: firstInstrument,
+                      instrument: "",
                       symbol: "",
                       expiryDate: "",
                     }));
-                    fetchSymbol({
-                      exchange: selectedOption.value,
-                      instrument: firstInstrument,
-                    });
                   }}
                   placeholder="Select Exchange"
-                  className="ocf-select card-bg-color card-text-color"
+                  className="ocf-select card-text-color"
                 />
               </div>
 
-              <div className="ocf-group">
-                <label>Instrument</label>
-                <Select
-                  name="instrument"
-                  options={getInstrumentOptions(formValues.exchange)}
-                  value={getInstrumentOptions(formValues.exchange).find(
-                    (option) => option.value === formValues.instrument
-                  )}
-                  onChange={(selectedOption) => {
-                    setFieldValue("instrument", selectedOption.value);
-                    setFormValues((prev) => ({
-                      ...prev,
-                      instrument: selectedOption.value,
-                      symbol: "",
-                      expiryDate: "",
-                    }));
-                    fetchSymbol({
-                      ...formValues,
-                      instrument: selectedOption.value,
-                    });
-                  }}
-                  placeholder="Select Instrument"
-                  className="ocf-select card-bg-color card-text-color"
-                />
-              </div>
+              {values.exchange !== "NSE" && (
+                <div className="ocf-group">
+                  <label className="card-text-Color">Instrument</label>
+                  <Select
+                    name="instrument"
+                    options={getInstrumentOptions(values.exchange)}
+                    value={
+                      getInstrumentOptions(values.exchange).find(
+                        (option) => option.value === values.instrument
+                      ) || null
+                    }
+                    onChange={(selectedOption) => {
+                      setFieldValue("instrument", selectedOption.value);
+                      setFieldValue("symbol", "");
+                      setFieldValue("expiryDate", "");
+                      setFormValues((prev) => ({
+                        ...prev,
+                        instrument: selectedOption.value,
+                        symbol: "",
+                        expiryDate: "",
+                      }));
+                    }}
+                    placeholder="Select Instrument"
+                    className="ocf-select card-text-color"
+                  />
+                </div>
+              )}
 
               <div className="ocf-group">
-                <label>Symbol</label>
+                <label className="card-text-Color">Symbol</label>
                 <Select
                   name="symbol"
                   options={symbolOptions}
-                  value={symbolOptions.find(
-                    (option) => option.value === formValues.symbol
-                  )}
+                  value={
+                    symbolOptions.find(
+                      (option) => option.value === values.symbol
+                    ) || null
+                  }
                   onChange={(selectedOption) => {
                     setFieldValue("symbol", selectedOption.value);
+                    setFieldValue("expiryDate", "");
                     setFormValues((prev) => ({
                       ...prev,
                       symbol: selectedOption.value,
                       expiryDate: "",
                     }));
-                    FetchExpiry({
-                      ...formValues,
-                      symbol: selectedOption.value,
-                    });
                   }}
                   placeholder="Select Symbol"
-                  className="ocf-select card-bg-color card-text-color"
+                  className="ocf-select card-text-color"
                   styles={{
                     menuList: (provided) => ({
                       ...provided,
@@ -580,13 +742,16 @@ const OptionChainForm = () => {
               </div>
 
               <div className="ocf-group">
-                <label>Expiry Date</label>
+                <label className="card-text-Color">Expiry Date</label>
                 <Select
                   name="expiryDate"
                   options={expiry.map((date) => ({ value: date, label: date }))}
-                  value={expiry
-                    .map((date) => ({ value: date, label: date }))
-                    .find((option) => option.value === formValues.expiryDate)}
+                  value={
+                    expiry
+                      .map((date) => ({ value: date, label: date }))
+                      .find((option) => option.value === values.expiryDate) ||
+                    null
+                  }
                   onChange={(selectedOption) => {
                     setFieldValue("expiryDate", selectedOption.value);
                     setFormValues((prev) => ({
@@ -595,7 +760,7 @@ const OptionChainForm = () => {
                     }));
                   }}
                   placeholder="Select Expiry"
-                  className="ocf-select card-bg-color card-text-color"
+                  className="ocf-select card-text-color"
                   styles={{
                     menuList: (provided) => ({
                       ...provided,
@@ -608,7 +773,7 @@ const OptionChainForm = () => {
 
             <div className="ocf-container-row">
               <div className="ocf-group">
-                <label>trade Type</label>
+                <label className="card-text-Color mb-1">Target Type</label>
                 <Select
                   name="targetType"
                   options={TargetTypeArr.map((type) => ({
@@ -632,11 +797,11 @@ const OptionChainForm = () => {
               </div>
 
               <div className="ocf-group">
-                <label>Target</label>
-                <input
-                  type="text"
+                <label className="card-text-Color mb-1">Target</label>
+                <Field
                   name="target"
-                  value={formValues.target}
+                  type="number"
+                  value={values.target || ""}
                   onChange={(e) => {
                     setFieldValue("target", e.target.value);
                     setFormValues((prev) => ({
@@ -645,16 +810,16 @@ const OptionChainForm = () => {
                     }));
                   }}
                   placeholder="Enter Target"
-                  className="ocf-control"
+                  className="ocf-control text-center"
                 />
               </div>
 
-              <div className="ocf-group">
-                <label>Stop Loss</label>
-                <input
-                  type="text"
+              <div className="ocf-group mt-1">
+                <label className="card-text-Color mb-1">Stoploss</label>
+                <Field
                   name="stoploss"
-                  value={formValues.stoploss}
+                  type="number"
+                  value={values.stoploss || ""}
                   onChange={(e) => {
                     setFieldValue("stoploss", e.target.value);
                     setFormValues((prev) => ({
@@ -662,36 +827,71 @@ const OptionChainForm = () => {
                       stoploss: e.target.value,
                     }));
                   }}
-                  placeholder="Enter Stop Loss"
-                  className="ocf-control"
+                  placeholder="Enter Stoploss"
+                  className="ocf-control text-center"
                 />
               </div>
 
-              {/* Bottom row with 3 parameters */}
               <div className="ocf-group">
-                <label>Plan Name</label>
+                <label className="card-text-Color">Plan Name</label>
                 <Select
                   name="planname"
                   options={planNames.map((plan) => ({
-                    value: plan,
-                    label: plan,
+                    value: plan.Planname,
+                    label: plan.Planname,
                   }))}
-                  value={planNames
-                    .map((plan) => ({ value: plan, label: plan }))
-                    .find((option) => option.value === values.planname)}
+                  value={
+                    values.planname
+                      ? { value: values.planname, label: values.planname }
+                      : null
+                  }
                   onChange={(selectedOption) => {
                     setFieldValue("planname", selectedOption.value);
                     setFormValues((prev) => ({
                       ...prev,
                       planname: selectedOption.value,
                     }));
+                    setFieldValue("strategyTag", "");
                   }}
-                  placeholder="Select Strategy"
-                  className="ocf-select"
+                  placeholder="Select Plan"
+                  className="ocf-select card-text-color"
                 />
               </div>
 
-              <div className="ocf-group">
+              {values?.planname && (
+                <div className="ocf-group">
+                  <label className="card-text-Color">Strategy Tag</label>
+                  <Select
+                    name="strategyTag"
+                    options={
+                      planNames
+                        .find((plan) => plan.Planname === values.planname)
+                        ?.Strategytag?.map((item) => ({
+                          value: item,
+                          label: item,
+                        })) || []
+                    }
+                    value={
+                      values.strategyTag
+                        ? {
+                            value: values.strategyTag,
+                            label: values.strategyTag,
+                          }
+                        : null
+                    }
+                    onChange={(selectedOption) => {
+                      setFormValues((prev) => ({
+                        ...prev,
+                        strategyTag: selectedOption.value,
+                      }));
+                    }}
+                    placeholder="Select Strategy"
+                    className="ocf-select card-text-color"
+                  />
+                </div>
+              )}
+
+               <div className="ocf-group">
                 <label>Key</label>
                 <Field
                   name="key"
@@ -707,48 +907,98 @@ const OptionChainForm = () => {
         )}
       </Formik>
 
-      <Table bordered hover={false} responsive className="mt-4 modern-table">
-        <thead className="modern-table-header">
-          <tr>
-            {OptionChainColumn.map((col, index) => (
-              <th key={index} className="text-center">
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {strikeToken?.length > 0 ? (
-            strikeToken.map((row, rowIndex) => {
-              const middleRowIndex = Math.floor(strikeToken?.length / 2);
-              const rowStyle =
-                rowIndex === middleRowIndex
-                  ? { backgroundColor: "#d3d3d3" } // Gray color for the middle row
-                  : { backgroundColor: "#ffffff" }; // White color for all other rows
+      {/* Price Legend */}
+      {Object.keys(livePrices).length > 0 && (
+        <div
+          style={{
+            margin: "15px 0",
+            padding: "10px",
+            backgroundColor: "#f8f9fa",
+            borderRadius: "5px",
+            display: "flex",
+            gap: "20px",
+            alignItems: "center",
+            fontSize: "14px",
+          }}
+        >
+          <span>
+            <strong>Price Movement:</strong>
+          </span>
+          <span
+            style={{
+              backgroundColor: "#d4edda",
+              color: "#155724",
+              padding: "2px 8px",
+              borderRadius: "3px",
+              border: "1px solid #c3e6cb",
+            }}
+          >
+            ↑ Price Up
+          </span>
+          <span
+            style={{
+              backgroundColor: "#f8d7da",
+              color: "#721c24",
+              padding: "2px 8px",
+              borderRadius: "3px",
+              border: "1px solid #f5c6cb",
+            }}
+          >
+            ↓ Price Down
+          </span>
+        </div>
+      )}
 
-              return (
-                <tr key={rowIndex} style={rowStyle}>
-                  {OptionChainColumn.map((col, colIndex) => (
-                    <td key={colIndex} className="text-center">
-                      {col.options?.customBodyRender
-                        ? col.options.customBodyRender(row[col.name], {
-                            rowData: row,
-                          })
-                        : row[col.name] || "-"}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })
-          ) : (
+      {formValues.exchange &&
+      formValues.instrument &&
+      formValues.symbol &&
+      formValues.expiryDate ? (
+        <Table bordered hover={false} responsive className="mt-4 modern-table">
+          <thead className="modern-table-header">
             <tr>
-              <td colSpan={OptionChainColumn?.length} className="text-center">
-                No data available
-              </td>
+              {OptionChainColumn.map((col, index) => (
+                <th key={index} className="text-center">
+                  {col.label}
+                </th>
+              ))}
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {strikeToken?.length > 0 ? (
+              strikeToken.map((row, rowIndex) => {
+                const midIndex = Math.floor(strikeToken.length / 2);
+
+                return (
+                  <tr key={rowIndex}>
+                    {OptionChainColumn.map((col, colIndex) => (
+                      <td
+                        key={colIndex}
+                        className={`text-center ${
+                          rowIndex === midIndex
+                            ? "selectedRowIndex"
+                            : "commonIndexClass"
+                        }`}
+                      >
+                        {col.options?.customBodyRender
+                          ? col.options.customBodyRender(row[col.name], {
+                              rowData: row,
+                            })
+                          : row[col.name] || "-"}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={OptionChainColumn?.length} className="text-center">
+                  No data available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      ) : null}
     </Content>
   );
 };

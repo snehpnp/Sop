@@ -22,13 +22,13 @@ const AddClient = (Planname) => {
     loading: true,
     data: [],
   });
-  const [serviceEndDate, setServiceEndDate] = useState("");
-  const [showPnl, setShowPnl] = useState(false);
+
   const [symbolOptions, setSymbolOptions] = useState([]);
   const [exchangeOptions, setExchangeOptions] = useState([]);
   const [openModel, setOpenModel] = useState(false);
   const [optionRadioType, setOptionRadioType] = useState([]);
   const getPlanname = localStorage.getItem("Planname");
+  const [activeStrategys, setActiveStrategys] = useState([]);
 
   const [PnlData, setPnlData] = useState({
     MaximumProfit: "",
@@ -1299,6 +1299,68 @@ const AddClient = (Planname) => {
     fetchRadioOptions();
   }, []);
 
+  useEffect(() => {
+  
+
+    // strategy map bana lo
+    const strategyMap = {
+      Straddle_Strangle: [
+        { value: "LongStrangle" },
+        { value: "ShortStrangle" },
+        { value: "LongStraddle" },
+        { value: "ShortStraddle" },
+      ],
+      Butterfly_Condor: [
+        { value: "LongIronButterfly" },
+        { value: "ShortIronButterfly" },
+        { value: "LongIronCondor" },
+        { value: "ShortIronCondor" },
+      ],
+      Spread: [
+        { value: "BearCallSpread" },
+        { value: "BearPutSpread" },
+        { value: "BullCallSpread" },
+        { value: "BullPutSpread" },
+      ],
+      Ladder_Coverd: [
+        { value: "BullCallLadder" },
+        { value: "BullPutLadder" },
+        { value: "CoveredCall" },
+        { value: "CoveredPut" },
+      ],
+      Collar_Ratio: [
+        { value: "LongCollar" },
+        { value: "ShortCollar" },
+        { value: "RatioCallSpread" },
+        { value: "RatioPutSpread" },
+      ],
+      Shifting_FourLeg: [
+        { value: "ShortShifting" },
+        { value: "LongShifting" },
+        { value: "ShortFourLegStretegy" },
+        { value: "LongFourLegStretegy" },
+      ],
+    };
+
+    // 👇 array diya gaya
+    const selectedTypes =
+      location?.state?.data?.scriptType?.data?.[
+        location?.state?.data?.scriptType?.len
+      ]?.CombineOption || [];
+
+    // un sab ke titles nikal lo
+    const titles = selectedTypes.flatMap((type) =>
+      (strategyMap[type] || []).map((item) => item.value)
+    );
+
+    setActiveStrategys(titles);
+  }, [
+    location?.state?.data?.scriptType?.data?.[
+      location?.state?.data?.scriptType?.len
+    ]?.CombineOption,
+  ]);
+
+
   const fields = [
     {
       name: "Measurment_Type",
@@ -1316,9 +1378,14 @@ const AddClient = (Planname) => {
       name: "Strategy",
       label: "Strategy",
       type: "radio2",
-      title: optionRadioType?.map((item) => {
-        return { title: item, value: item, iconText: optionStrategyText[item] };
-      }),
+    title: optionRadioType
+  .filter(item => activeStrategys.includes(item)) // पहले सिर्फ active वाले लो
+  .map(item => ({
+    title: item,
+    value: item,
+    iconText: optionStrategyText[item],
+  })),
+
       label_size: 12,
       col_size: 8,
       disable: false,
@@ -1438,25 +1505,6 @@ const AddClient = (Planname) => {
   useEffect(() => {
     getExpriyData();
   }, [formik.values.Symbol]);
-
-  const GetExpriyEndDate = async () => {
-    const data = { Username: userName };
-    await ExpriyEndDate(data)
-      .then((response) => {
-        if (response.Status) {
-          setServiceEndDate(response.Data[0].ExpiryDate);
-        } else {
-          setServiceEndDate("");
-        }
-      })
-      .catch((err) => {
-        console.log("Error in finding the Service end date", err);
-      });
-  };
-
-  useEffect(() => {
-    GetExpriyEndDate();
-  }, []);
 
   useEffect(() => {
     if (formik.values.Striketype == "Depth_of_Strike") {
@@ -1616,7 +1664,6 @@ const AddClient = (Planname) => {
     await CheckPnL(req)
       .then((response) => {
         if (response.Status) {
-          setShowPnl(true);
           setOpenModel(true);
           setPnlData({
             MaximumProfit: response.MaximumProfit,
@@ -1645,10 +1692,6 @@ const AddClient = (Planname) => {
         console("Error in fatching the Pnl", err);
       });
   };
-
-  useEffect(() => {
-    setShowPnl(false);
-  }, [formik.values]);
 
   return (
     <>

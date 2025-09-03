@@ -351,6 +351,7 @@ const TradeResponse = () => {
           : "",
       TradePattern: "",
       PatternName: "",
+      Dataid: selectedRowData?._id || "",
     };
 
 

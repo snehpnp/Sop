@@ -162,7 +162,7 @@ const ChartingCard = ({
           <h5 className="mb-0 text-left fw-bold card-text-Color" style={{ fontSize: "1.5rem", flex: 1 }}>
             {item.Segment}
           </h5>
-          {/* <button className="signal-btn card-bg-color card-text-Color" style={{ fontSize: "0.95rem", padding: "3px 12px", borderRadius: "6px", background: "#f5f6fa", border: "1px solid #eaeaea", marginLeft: "10px", color: "inherit" }} onClick={() => handleSignal(item.Segment)}>View Signal</button> */}
+          
           <button className="viewSignal-button" onClick={() => handleSignal(item.Segment)}>
             <span className="viewSignal-button-content" >View Signal </span>
           </button>

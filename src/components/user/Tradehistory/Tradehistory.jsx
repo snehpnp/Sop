@@ -376,6 +376,7 @@ const Tradehistory = () => {
         TradePattern: "",
         PatternName: "",
         InitialDeposite: 0,
+        Dataid: selectedRowData?._id || "",
       };
       const overviewRes = await get_Trade_History(overviewParams);
 
@@ -515,6 +516,7 @@ const Tradehistory = () => {
           TradePattern: "",
           PatternName: "",
           InitialDeposite: 0,
+          Dataid: selectedRowData?._id || "",
         };
       }
 
@@ -863,7 +865,7 @@ const Tradehistory = () => {
 
                 {getAllTradeData.data.length > 0 ? (
                   <>
-                    {console.log("selectStrategyType", selectStrategyType)}
+
                     <GridExample
                       columns={
                         selectStrategyType == "GoldenStrategy" ||

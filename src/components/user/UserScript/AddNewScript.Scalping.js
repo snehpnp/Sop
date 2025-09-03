@@ -65,8 +65,8 @@ const AddClient = () => {
   const dataWithoutLastItem = location?.state?.data?.scriptType?.data?.slice(0, -1);
 
   const getEndData = (stg) => {
-    const foundItem = dataWithoutLastItem.find((item) => {
-      return item.Scalping.includes(stg);
+    const foundItem = dataWithoutLastItem?.find((item) => {
+      return item?.Scalping?.includes(stg);
     });
     return foundItem?.EndDate;
   };
@@ -149,7 +149,15 @@ const AddClient = () => {
       NumberOfDays: "0",
       RolloverTime: "00:00:00",
       TargetExit: false,
-      WorkingDay: [],
+      WorkingDay: [
+
+        { label: "Monday", value: "Monday" },
+        { label: "Tuesday", value: "Tuesday" },
+        { label: "Wednesday", value: "Wednesday" },
+        { label: "Thursday", value: "Thursday" },
+        { label: "Friday", value: "Friday" },
+        { label: "Saturday", value: "Saturday" },
+      ],
       OrderType: "Pending",
       FinalTarget: 0.0,
     },

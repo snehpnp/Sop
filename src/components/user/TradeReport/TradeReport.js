@@ -300,8 +300,8 @@ const TradeReport = () => {
           : "",
       TradePattern: "",
       PatternName: "",
+      Dataid: selectedRowData?._id || "",
     };
-
     try {
       const response = await get_Trade_Report(data);
       if (response.Status) {

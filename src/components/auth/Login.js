@@ -183,15 +183,7 @@ const Login = () => {
     }
 
 
-    const toggle = (e) => {
-        e.preventDefault();
-        if (changeType === "password") {
-            setChangeType("text");
-            setVisiablity("eye");
-        } else {
-            setChangeType("password");
-        }
-    };
+  
     const [rightPanelActive, setRightPanelActive] = useState(false);
 
 
@@ -339,6 +331,8 @@ const Login = () => {
                 console.log("Error Group data fetch error", err);
             });
     };
+
+    
 
     useEffect(() => {
         get_header_img2();

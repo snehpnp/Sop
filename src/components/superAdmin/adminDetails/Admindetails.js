@@ -1078,7 +1078,7 @@ const Strategygroup = () => {
             label: "Permission",
             type: "select2",
             label_size: 12,
-            col_size: 6,
+            col_size: 12,
             disable: false,
             options: permissionArray,
             //added data

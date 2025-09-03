@@ -38,13 +38,13 @@
 export const ChatBot_Base_Url = `https://chatbot.tradestreet.in/backend/`; 
 export const superAdmin_base_url = `https://soptools.tradestreet.in/superbackend/`;
 
-export const base_url = `https://soptools.tradestreet.in/backend/`;
-// export const base_url = `https://tools.tradestreet.in/backend/`;
+// export const base_url = `https://soptools.tradestreet.in/backend/`;
+export const base_url = `https://tools.tradestreet.in/backend/`;
 // export const base_url = `https://tools.technofin.tech//backend/`;
 
 
 
-// Configuration for API base URLs
+// // Configuration for API base URLs
 // export const base_url = `${window.location.origin}/backend/`;
 // export const ChatBot_Base_Url = `https://chatbot.tradestreet.in/backend/`; 
 // export const superAdmin_base_url = `https://soptools.tradestreet.in/superbackend/`;

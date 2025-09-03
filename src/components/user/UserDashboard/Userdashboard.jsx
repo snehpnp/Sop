@@ -152,7 +152,6 @@ const Userdashboard = () => {
     try {
       const res = await getStrategyType();
       if (res.Data) {
-        console.log("res.Data", res.Data);
         setStrategyType(res.Data);
       }
     } catch (error) {
@@ -360,7 +359,7 @@ const Userdashboard = () => {
     },
     {
       name: "LotSize",
-      label: "Lot",
+      label: "Quantity",
       options: {
         filter: true,
         sort: true,

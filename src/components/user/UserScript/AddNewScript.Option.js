@@ -31,12 +31,11 @@ const AddClient = () => {
     loading: true,
     data: [],
   });
-  const [serviceEndDate, setServiceEndDate] = useState("");
-  const [showPnl, setShowPnl] = useState(false);
   const [symbolOptions, setSymbolOptions] = useState([]);
   const [exchangeOptions, setExchangeOptions] = useState([]);
   const [openModel, setOpenModel] = useState(false);
   const [optionSSTData, setOptionSSTData] = useState();
+
 
   const [PnlData, setPnlData] = useState({
     MaximumProfit: "",
@@ -48,6 +47,8 @@ const AddClient = () => {
     NoprofitLoss1: "",
     NoprofitLoss2: "",
   });
+
+
 
   const SweentAlertFun = (text) => {
     Swal.fire({
@@ -68,8 +69,8 @@ const AddClient = () => {
       -1
     );
 
-    const foundItem = dataWithoutLastItem.find((item) => {
-      return item["Option Strategy"].includes(stg);
+    const foundItem = dataWithoutLastItem?.find((item) => {
+      return item["Option Strategy"]?.includes(stg);
     });
     return foundItem?.EndDate;
   };
@@ -149,7 +150,14 @@ const AddClient = () => {
       Profit: "0",
       Loss: "0",
       ExitRuleO: "",
-      WorkingDay: [],
+      WorkingDay:[
+        { label: "Monday", value: "Monday" },
+        { label: "Tuesday", value: "Tuesday" },
+        { label: "Wednesday", value: "Wednesday" },
+        { label: "Thursday", value: "Thursday" },
+        { label: "Friday", value: "Friday" },
+        { label: "Saturday", value: "Saturday" },
+      ],
       Planname: "",
     },
     validate: (values) => {
@@ -518,7 +526,7 @@ const AddClient = () => {
         FixedSM: "",
         TType: "",
         serendate: getEndData(formik.values.Measurment_Type),
-        expirydata1: getExpiry && getExpiry.data[0],
+        expirydata1: getExpiry && values.Expirytype == "Next Month" ? getExpiry.data[1]  : values.Expirytype == "Next to Next Month" ? getExpiry.data[2] : getExpiry.data[0],
         Expirytype: values.Expirytype,
         Striketype:
           formik.values.Strategy !== "ShortStraddle" &&
@@ -809,8 +817,16 @@ const AddClient = () => {
           ? [
               { label: "Weekly", value: "Weekly" },
               { label: "Monthly", value: "Monthly" },
+              { label: "Next Month", value: "Next Month" },
+              { label: "Next to Next Month", value: "Next to Next Month" },
+
+
             ]
-          : [{ label: "Monthly", value: "Monthly" }],
+          : [{ label: "Monthly", value: "Monthly" },
+              { label: "Next Month", value: "Next Month" },
+              { label: "Next to Next Month", value: "Next to Next Month" },
+          ],
+
 
       hiding: false,
       label_size: 12,
@@ -1566,9 +1582,7 @@ const AddClient = () => {
   ];
 
   useEffect(() => {
-    if (formik.values.Striketype === "Depth_of_Strike") {
-      formik.setFieldValue("DepthofStrike", 1);
-    }
+  
 
     formik.setFieldValue(
       "Strategy",
@@ -1586,7 +1600,17 @@ const AddClient = () => {
         ? "ShortShifting"
         : ""
     );
-  }, [formik.values.Measurment_Type, formik.values.Striketype]);
+  }, [formik.values.Measurment_Type, ]);
+
+
+  useEffect(()=>{
+  if (formik.values.Striketype === "Depth_of_Strike") {
+      formik.setFieldValue("DepthofStrike", 1);
+    }
+  },[formik.values.Striketype])
+
+
+
 
   const getExpriyData = async () => {
     const data = {
@@ -1623,24 +1647,7 @@ const AddClient = () => {
     getExpriyData();
   }, [formik.values.Symbol]);
 
-  const GetExpriyEndDate = async () => {
-    const data = { Username: userName };
-    await ExpriyEndDate(data)
-      .then((response) => {
-        if (response.Status) {
-          setServiceEndDate(response.Data[0].ExpiryDate);
-        } else {
-          setServiceEndDate("");
-        }
-      })
-      .catch((err) => {
-        console.log("Error in finding the Service end date", err);
-      });
-  };
 
-  useEffect(() => {
-    GetExpriyEndDate();
-  }, []);
 
   useEffect(() => {
     if (
@@ -1768,7 +1775,7 @@ const AddClient = () => {
       FixedSM: "",
       TType: "",
       serendate: getEndData(formik.values.Measurment_Type),
-      expirydata1: getExpiry && getExpiry.data[0],
+      expirydata1: getExpiry && formik.values.Expirytype == "Next Month" ? getExpiry.data[1]  : formik.values.Expirytype == "Next to Next Month" ? getExpiry.data[2] : getExpiry.data[0],
       Expirytype: formik.values.Expirytype,
       Striketype:
         formik.values.Strategy != "ShortStraddle" &&
@@ -1817,7 +1824,6 @@ const AddClient = () => {
     await CheckPnL(req)
       .then((response) => {
         if (response.Status) {
-          setShowPnl(true);
           setOpenModel(true);
           setPnlData({
             MaximumProfit: response.MaximumProfit,
@@ -1857,9 +1863,6 @@ const AddClient = () => {
       });
   };
 
-  useEffect(() => {
-    setShowPnl(false);
-  }, [formik.values]);
 
   const [activeTab, setActiveTab] = useState("nameWise");
 
@@ -1888,7 +1891,7 @@ const AddClient = () => {
         Instrument: formik.values.Exchange != "NFO" ? "IO" : "FUTIDX",
         LowerRange: formik.values.Striketype == "Premium_Range" ? formik.values.Lower_Range : 0,
         HigherRange: formik.values.Striketype == "Premium_Range" ? formik.values.Higher_Range : 0,
-        expirydata1: getExpiry.data[0],
+        expirydata1: formik.values.Expirytype == "Next Month" ? getExpiry.data[1]  : formik.values.Expirytype == "Next to Next Month" ? getExpiry.data[2] : getExpiry.data[0],
         Expirytype: formik.values.Expirytype,
         Striketype:  formik.values.Strategy == "ShortFourLegStretegy" || formik.values.Strategy == "LongFourLegStretegy"  ? "Premium_Range" :formik.values.Striketype,
         DepthofStrike: formik.values.Strategy == "LongStrangle"  && formik.values.Striketype == "Premium_Range" ? 0 : formik.values.Striketype == "Premium_Range" ? formik.values.DepthofStrike : 0,

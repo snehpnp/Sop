@@ -88,7 +88,15 @@ const AddClient = () => {
       Expirytype: "",
       Trade_Count: 1,
       Group: "",
-      WorkingDay: [],
+      WorkingDay: [
+
+        { label: "Monday", value: "Monday" },
+        { label: "Tuesday", value: "Tuesday" },
+        { label: "Wednesday", value: "Wednesday" },
+        { label: "Thursday", value: "Thursday" },
+        { label: "Friday", value: "Friday" },
+        { label: "Saturday", value: "Saturday" },
+      ],
       Profit: "0",
       Loss: "0",
       CallExitTargettype: "",
@@ -120,9 +128,9 @@ const AddClient = () => {
         }
       });
       // Group
-      if (!values.Group) {
-        errors.Group = "Please Fill Unique Name.";
-      }
+      // if (!values.Group) {
+      //   errors.Group = "Please Fill Unique Name.";
+      // }
 
       // Numeric validations
       if (!values.Targetvalue || values.Targetvalue == 0) {
@@ -214,6 +222,7 @@ const AddClient = () => {
           }
         });
       }
+
 
       return errors;
     },
