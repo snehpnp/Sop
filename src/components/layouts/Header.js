@@ -7,8 +7,7 @@ import axios from "axios";
 import {
   addChartingScript,
   getChargingPlatformDataApi,
-
-  TradingStatus,
+TradingStatus,
 } from "../CommonAPI/User";
 import Swal from "sweetalert2";
 import { Wallet, ChevronUp, ChevronDown, SunMoon } from "lucide-react";
