@@ -1,12 +1,4 @@
-/* :root {
-  --bg-color: hsl(0, 0%, 100%);
-  --text-color: #2a2a2a;
-}
- 
-[data-theme="dark"] {
-  --bg-color: #0c0c0c;
-  --text-color: #ffffff;
-} */
+
 
 .group-container {
   display: grid;
