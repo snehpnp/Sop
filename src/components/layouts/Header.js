@@ -33,8 +33,11 @@ import { toast } from "react-toastify";
 const Header = ({ permissionData }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showFunds, setShowFunds] = useState(false);
+  
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+    document.body.classList.toggle("sidebar-open"); // body par class toggle
   };
   const [selectedImage, setSelectedImage] = useState(
     localStorage.getItem("userProfileImage") || null

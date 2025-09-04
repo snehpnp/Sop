@@ -101,9 +101,18 @@ const Sidebar = ({  }) => {
     getSubAdminPermission();
   }, []);
 
-  const handleSidebarClick = (event, item) => {
-    setActiveItem(item);
-  };
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+const handleSidebarClick = (e, item) => {
+  const hasChild = e.currentTarget.querySelector(".iq-submenu");
+
+  setActiveItem(item);
+
+  if (!hasChild && document.body.classList.contains("sidebar-open")) {
+    document.body.classList.remove("sidebar-open");
+    setIsSidebarOpen(false); 
+  }
+};
 
   useEffect(() => {
     const sidebar = sidebarRef.current;
@@ -357,8 +366,11 @@ const Sidebar = ({  }) => {
     }
   };
 
+ 
   return (
-    <div className="iq-sidebar" onClick={() => sessionStorage.clear()}>
+  <>
+    {/* Sidebar */}
+    <div className={`iq-sidebar sidebar-left ${isActive ? "open" : ""}`}>
       <div className="iq-sidebar-logo d-flex justify-content-between"></div>
       <div
         id="sidebar-scrollbar"
@@ -383,7 +395,13 @@ const Sidebar = ({  }) => {
         </div>
       </div>
     </div>
-  );
+
+    {/* Overlay (modal style) */}
+    {isActive && <div className="sidebar-overlay" onClick={() => setIsActive(false)} />}
+  </>
+);
+
+
 };
 
 export default Sidebar;

@@ -9287,3 +9287,22 @@ text-transform: capitalize !important;
 {
  border: 1px solid #fff !important;
 }
+@media screen and (max-width: 1024px) {
+  .iq-sidebar
+  {
+    display: none !important;
+  }
+  body.sidebar-main-menu.sidebar-main .content-page {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+.sidebar-open .iq-sidebar {
+    display: block !important;
+    background-color: #fff !important;
+}
+body.sidebar-main-menu.sidebar-main.sidebar-open
+{
+  margin-left: 60px !important;
+  margin-right: 60px !important;
+}
+}
