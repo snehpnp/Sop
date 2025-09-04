@@ -13,7 +13,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { useSidebar } from "./SidebarContext";
 import { getAdminPermission, SubAdminPermission } from "../CommonAPI/Admin";
 
-const Sidebar = ({ permissionData }) => {
+const Sidebar = ({  }) => {
   const role = localStorage.getItem("Role");
   const name = localStorage.getItem("name");
 
@@ -44,6 +44,35 @@ const Sidebar = ({ permissionData }) => {
     favicon.attr("href", fevicon && fevicon);
     $("head").append(favicon);
   };
+
+
+
+
+  useEffect(() => {
+
+      getAdminPermission()
+        .then((response) => {
+          if (response.Status) {
+            localStorage.removeItem("adminPermission");
+
+            localStorage.setItem(
+              "adminPermission",
+              JSON.stringify(response.Data)
+            );
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching admin permissions", err);
+        });
+ 
+  }, []);
+
+
+
+
+
+
+
   useEffect(() => {
     setImages();
   }, []);

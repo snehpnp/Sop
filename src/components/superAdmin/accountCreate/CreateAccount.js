@@ -9,7 +9,6 @@ import AddForm from "../../../ExtraComponent/FormData2";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import Content from "../../../ExtraComponent/Content";
-import { options } from "@fullcalendar/core/preact.js";
 
 const Adduser = () => {
   const navigate = useNavigate();

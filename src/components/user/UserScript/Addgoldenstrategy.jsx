@@ -27,7 +27,7 @@ const AddClient = () => {
   const [exchangeOptions, setExchangeOptions] = useState([]);
   const [activeTab, setActiveTab] = useState("MomentumPicker");
   const [tabPermission, setTabPermission] = useState([]);
-  const [optionSSTData, setOptionSSTData] = useState();
+  const [optionSSTData, setOptionSSTData] = useState([]);
 
   // Helper function for error alerts
   const showErrorAlert = (text) => {
@@ -128,9 +128,9 @@ const AddClient = () => {
         }
       });
       // Group
-      // if (!values.Group) {
-      //   errors.Group = "Please Fill Unique Name.";
-      // }
+      if (!values.Group) {
+        errors.Group = "Please Fill Unique Name.";
+      }
 
       // Numeric validations
       if (!values.Targetvalue || values.Targetvalue == 0) {
@@ -310,6 +310,7 @@ const AddClient = () => {
             text: "Option Script Added Successfully",
             icon: "success",
             confirmButtonText: "OK",
+            timer: 1500,
           });
 
           // Save strategy type in session
@@ -320,6 +321,8 @@ const AddClient = () => {
 
           // Navigate after short delay
           setTimeout(() => navigate("/user/dashboard"), 1500);
+       
+
         } else {
           // Handle API error response
           showErrorAlert(response?.message || "❌ Failed to add script");
@@ -870,10 +873,8 @@ const AddClient = () => {
       label_size: 12,
       col_size: 12,
       headingtype: 11,
-      data: EntryRuleArr.filter(
-        (item) => !item.showWhen || item.showWhen(formik.values)
-      ),
-      data1: optionSSTData,
+      data: EntryRuleArr,
+      data1: optionSSTData && optionSSTData || [],
       disable: false,
     },
     {

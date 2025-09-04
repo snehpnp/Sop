@@ -16,7 +16,7 @@ export const CreateAccount = async (data) => {
     return err;
   }
 };
-// getAdminPermission
+
 export const getAdminPermission = async (data) => {
   const token = localStorage.getItem("token");
   try {

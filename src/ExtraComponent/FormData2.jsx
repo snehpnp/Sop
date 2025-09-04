@@ -380,7 +380,7 @@ const DynamicForm = ({
                         {field.label === "Entry_Rule" && (
                           <>
                             <div className="row">
-                           {field.data2 &&   <>
+                           {(field?.data1 || field?.data2) &&   <>
                             <div className=" d-flex justify-content-between">
                                 <div className="iq-header-title">
                                   <h4 className="card-title">Entry Rule</h4>

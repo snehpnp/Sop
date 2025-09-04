@@ -36,7 +36,6 @@ const AddClient = () => {
   const [openModel, setOpenModel] = useState(false);
   const [optionSSTData, setOptionSSTData] = useState();
 
-
   const [PnlData, setPnlData] = useState({
     MaximumProfit: "",
     MaximumLoss: "",
@@ -48,7 +47,11 @@ const AddClient = () => {
     NoprofitLoss2: "",
   });
 
+  const [activeTab, setActiveTab] = useState("nameWise");
 
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  };
 
   const SweentAlertFun = (text) => {
     Swal.fire({
@@ -150,7 +153,7 @@ const AddClient = () => {
       Profit: "0",
       Loss: "0",
       ExitRuleO: "",
-      WorkingDay:[
+      WorkingDay: [
         { label: "Monday", value: "Monday" },
         { label: "Tuesday", value: "Tuesday" },
         { label: "Wednesday", value: "Wednesday" },
@@ -526,7 +529,12 @@ const AddClient = () => {
         FixedSM: "",
         TType: "",
         serendate: getEndData(formik.values.Measurment_Type),
-        expirydata1: getExpiry && values.Expirytype == "Next Month" ? getExpiry.data[1]  : values.Expirytype == "Next to Next Month" ? getExpiry.data[2] : getExpiry.data[0],
+        expirydata1:
+          getExpiry && values.Expirytype == "Next Month"
+            ? getExpiry.data[1]
+            : values.Expirytype == "Next to Next Month"
+            ? getExpiry.data[2]
+            : getExpiry.data[0],
         Expirytype: values.Expirytype,
         Striketype:
           formik.values.Strategy !== "ShortStraddle" &&
@@ -689,6 +697,12 @@ const AddClient = () => {
     },
   });
 
+  useEffect(() => {
+    if (formik.values.Striketype === "Depth_of_Strike") {
+      formik.setFieldValue("DepthofStrike", 1);
+    }
+  }, [formik.values.Striketype]);
+
   const Planname = location?.state?.data?.scriptType?.data?.find(
     (item) => item.EndDate == getEndData(formik.values.Measurment_Type)
   )?.Planname;
@@ -819,14 +833,12 @@ const AddClient = () => {
               { label: "Monthly", value: "Monthly" },
               { label: "Next Month", value: "Next Month" },
               { label: "Next to Next Month", value: "Next to Next Month" },
-
-
             ]
-          : [{ label: "Monthly", value: "Monthly" },
+          : [
+              { label: "Monthly", value: "Monthly" },
               { label: "Next Month", value: "Next Month" },
               { label: "Next to Next Month", value: "Next to Next Month" },
-          ],
-
+            ],
 
       hiding: false,
       label_size: 12,
@@ -1516,7 +1528,8 @@ const AddClient = () => {
         (item) => !item.showWhen || item.showWhen(formik.values)
       ),
       data1: optionSSTData,
-      data2: formik.values.Strategy != "ShortStraddle" &&
+      data2:
+        formik.values.Strategy != "ShortStraddle" &&
         formik.values.Strategy != "LongStraddle",
       // showWhen: () =>
       //   formik.values.Strategy != "ShortStraddle" &&
@@ -1582,8 +1595,6 @@ const AddClient = () => {
   ];
 
   useEffect(() => {
-  
-
     formik.setFieldValue(
       "Strategy",
       formik.values.Measurment_Type == "Straddle_Strangle"
@@ -1600,17 +1611,7 @@ const AddClient = () => {
         ? "ShortShifting"
         : ""
     );
-  }, [formik.values.Measurment_Type, ]);
-
-
-  useEffect(()=>{
-  if (formik.values.Striketype === "Depth_of_Strike") {
-      formik.setFieldValue("DepthofStrike", 1);
-    }
-  },[formik.values.Striketype])
-
-
-
+  }, [formik.values.Measurment_Type]);
 
   const getExpriyData = async () => {
     const data = {
@@ -1646,8 +1647,6 @@ const AddClient = () => {
   useEffect(() => {
     getExpriyData();
   }, [formik.values.Symbol]);
-
-
 
   useEffect(() => {
     if (
@@ -1775,7 +1774,12 @@ const AddClient = () => {
       FixedSM: "",
       TType: "",
       serendate: getEndData(formik.values.Measurment_Type),
-      expirydata1: getExpiry && formik.values.Expirytype == "Next Month" ? getExpiry.data[1]  : formik.values.Expirytype == "Next to Next Month" ? getExpiry.data[2] : getExpiry.data[0],
+      expirydata1:
+        getExpiry && formik.values.Expirytype == "Next Month"
+          ? getExpiry.data[1]
+          : formik.values.Expirytype == "Next to Next Month"
+          ? getExpiry.data[2]
+          : getExpiry.data[0],
       Expirytype: formik.values.Expirytype,
       Striketype:
         formik.values.Strategy != "ShortStraddle" &&
@@ -1863,13 +1867,6 @@ const AddClient = () => {
       });
   };
 
-
-  const [activeTab, setActiveTab] = useState("nameWise");
-
-  const handleTabChange = (key) => {
-    setActiveTab(key);
-  };
-
   const fetchOptionSST = async () => {
     try {
       if (
@@ -1882,41 +1879,94 @@ const AddClient = () => {
       ) {
         return;
       }
-    
+
+      console.log("formik.values.DepthofStrike", formik.values.DepthofStrike);
 
       let req = {
         Strategy: formik.values.Strategy,
         Exchange: formik.values.Exchange,
         Symbol: formik.values.Symbol,
         Instrument: formik.values.Exchange != "NFO" ? "IO" : "FUTIDX",
-        LowerRange: formik.values.Striketype == "Premium_Range" ? formik.values.Lower_Range : 0,
-        HigherRange: formik.values.Striketype == "Premium_Range" ? formik.values.Higher_Range : 0,
-        expirydata1: formik.values.Expirytype == "Next Month" ? getExpiry.data[1]  : formik.values.Expirytype == "Next to Next Month" ? getExpiry.data[2] : getExpiry.data[0],
+        LowerRange:
+          formik.values.Striketype == "Premium_Range"
+            ? formik.values.Lower_Range
+            : 0,
+        HigherRange:
+          formik.values.Striketype == "Premium_Range"
+            ? formik.values.Higher_Range
+            : 0,
+        expirydata1:
+          formik.values.Expirytype == "Next Month"
+            ? getExpiry.data[1]
+            : formik.values.Expirytype == "Next to Next Month"
+            ? getExpiry.data[2]
+            : getExpiry.data[0],
         Expirytype: formik.values.Expirytype,
-        Striketype:  formik.values.Strategy == "ShortFourLegStretegy" || formik.values.Strategy == "LongFourLegStretegy"  ? "Premium_Range" :formik.values.Striketype,
-        DepthofStrike: formik.values.Strategy == "LongStrangle"  && formik.values.Striketype == "Premium_Range" ? 0 : formik.values.Striketype == "Premium_Range" ? formik.values.DepthofStrike : 0,
-        
-        DeepStrike: (formik.values.Measurment_Type == "Ladder_Coverd" &&
-          formik.values.Measurment_Type != "Shifting_FourLeg" &&
-          (formik.values.Strategy == "BullCallLadder" ||
-            formik.values.Strategy == "BullPutLadder")) ||
-        formik.values.Strategy == "LongIronCondor" ||
-        formik.values.Strategy == "ShortIronCondor" ? formik.values.DeepStrike : 0,
-        CEDepthLower:  formik.values.Strategy == "ShortFourLegStretegy" ||
-        formik.values.Strategy == "LongFourLegStretegy" ? formik.values.CEDepthLower : 0,
-        CEDepthHigher:  formik.values.Strategy == "ShortFourLegStretegy" ||
-        formik.values.Strategy == "LongFourLegStretegy" ? formik.values.CEDepthHigher : 0,
-        PEDepthLower:  formik.values.Strategy == "ShortFourLegStretegy" ||
-        formik.values.Strategy == "LongFourLegStretegy" ? formik.values.PEDepthLower : 0,
-        PEDepthHigher:  formik.values.Strategy == "ShortFourLegStretegy" ||
-        formik.values.Strategy == "LongFourLegStretegy" ? formik.values.PEDepthHigher : 0,
-        CEDeepLower:  formik.values.Strategy == "ShortFourLegStretegy" ||
-        formik.values.Strategy == "LongFourLegStretegy" ? formik.values.CEDeepLower : 0,
-        CEDeepHigher:  formik.values.Strategy == "ShortFourLegStretegy" ||
-        formik.values.Strategy == "LongFourLegStretegy" ? formik.values.CEDeepHigher : 0,
-        PEDeepLower:  formik.values.Strategy == "ShortFourLegStretegy" ||
-        formik.values.Strategy == "LongFourLegStretegy" ? formik.values.PEDeepLower : 0,
-        PEDeepHigher: formik.values.Strategy == "ShortFourLegStretegy" || formik.values.Strategy == "LongFourLegStretegy" ? formik.values.PEDeepHigher?.toString() : 0,
+        Striketype:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? "Premium_Range"
+            : formik.values.Striketype,
+
+        DepthofStrike:
+          formik.values.Striketype == "Depth_of_Strike"
+            ? formik.values.DepthofStrike
+            : formik.values.Strategy == "LongStrangle" &&
+              formik.values.Striketype == "Premium_Range"
+            ? 0
+            : formik.values.Striketype == "Premium_Range"
+            ? formik.values.DepthofStrike
+            : formik.values.DepthofStrike,
+
+        DeepStrike:
+          (formik.values.Measurment_Type == "Ladder_Coverd" &&
+            formik.values.Measurment_Type != "Shifting_FourLeg" &&
+            (formik.values.Strategy == "BullCallLadder" ||
+              formik.values.Strategy == "BullPutLadder")) ||
+          formik.values.Strategy == "LongIronCondor" ||
+          formik.values.Strategy == "ShortIronCondor"
+            ? formik.values.DeepStrike
+            : 0,
+        CEDepthLower:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.CEDepthLower
+            : 0,
+        CEDepthHigher:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.CEDepthHigher
+            : 0,
+        PEDepthLower:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.PEDepthLower
+            : 0,
+        PEDepthHigher:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.PEDepthHigher
+            : 0,
+        CEDeepLower:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.CEDeepLower
+            : 0,
+        CEDeepHigher:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.CEDeepHigher
+            : 0,
+        PEDeepLower:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.PEDeepLower
+            : 0,
+        PEDeepHigher:
+          formik.values.Strategy == "ShortFourLegStretegy" ||
+          formik.values.Strategy == "LongFourLegStretegy"
+            ? formik.values.PEDeepHigher?.toString()
+            : 0,
       };
       const response = await OptionSST_API(req);
       setOptionSSTData(response);
@@ -1924,6 +1974,7 @@ const AddClient = () => {
       console.error("Error fetching Option SST data:", error);
     }
   };
+
   useEffect(() => {
     fetchOptionSST();
   }, [
@@ -1946,13 +1997,10 @@ const AddClient = () => {
     formik.values.PEDeepHigher,
   ]);
 
-
   useEffect(() => {
-
     if (formik.values.Strategy) {
       formik.setFieldValue("Striketype", "Depth_of_Strike");
     }
-
   }, [formik.values.Strategy]);
 
   return (
