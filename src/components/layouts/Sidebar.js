@@ -371,11 +371,12 @@ const handleSidebarClick = (e, item) => {
   <>
     {/* Sidebar */}
     <div className={`iq-sidebar sidebar-left ${isActive ? "open" : ""}`}>
-      <div className="iq-sidebar-logo d-flex justify-content-between"></div>
+      <div className="iq-sidebar-logo  justify-content-between"></div>
       <div
         id="sidebar-scrollbar"
         data-scrollbar="true"
         tabIndex={-1}
+        className="mt-0"
         style={{ overflow: "hidden", outline: "none" }}
       >
         <div className="scroll-content">

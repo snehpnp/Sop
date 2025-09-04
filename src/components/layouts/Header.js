@@ -1485,9 +1485,9 @@ const Header = ({ permissionData }) => {
                     <></>
                   )}
 
-                  <li className="nav-item dropdown ">
+                  <li className="nav-item d-flex ">
 
-
+{/* 
                     <a
                       href="#"
                       className="nav-link dropdown-toggle d-flex align-items-center"
@@ -1498,15 +1498,15 @@ const Header = ({ permissionData }) => {
                     >
                       📈 Live Prices
                       <i className="ri-arrow-down-s-line ms-1"></i>
-                    </a>
+                    </a> */}
 
 
-                    <ul
+                    {/* <ul
                       className="dropdown-menu dropdown-menu-end shadow-sm"
                       aria-labelledby="priceDropdown"
                       style={{ minWidth: "180px" }}
-                    >
-                      <li className="live-price-item w-full mb-2">
+                    > */}
+                      <li className="live-price-item ">
                         <div className="live-price-box">
                           <span className="label card-text-Color">NIFTY:</span>
                           <span
@@ -1517,7 +1517,7 @@ const Header = ({ permissionData }) => {
                           </span>
                         </div>
                       </li>
-                      <li className="live-price-item w-full mb-2">
+                      <li className="live-price-item ">
                         <div className="live-price-box">
                           <span className="label card-text-Color">BANKNIFTY:</span>
                           <span
@@ -1537,7 +1537,7 @@ const Header = ({ permissionData }) => {
                           </span>
                         </div>
                       </li>
-                    </ul>
+                    {/* </ul> */}
                   </li>
 
 

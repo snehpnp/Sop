@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ChartingCard.css";
+// import "./ChartingCard.css";
 import NoDataFound from "../../../ExtraComponent/NoDataFound";
 import { IconButton, Typography } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
