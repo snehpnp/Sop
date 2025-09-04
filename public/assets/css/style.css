@@ -420,9 +420,9 @@ a:hover {
 }
 
 /* Form */
-#sidebar-scrollbar {
+/* #sidebar-scrollbar {
   height: 100%;
-}
+} */
 
  
 
@@ -1046,9 +1046,9 @@ ul.iq-menu a span {
 -----------------------------------------------------------------------*/
 
 /* Form */
-#sidebar-scrollbar {
+/* #sidebar-scrollbar {
   height: 100vh;
-}
+} */
 
 .scroll-content div.p-3 {
   height: 100px;
@@ -9299,10 +9299,26 @@ text-transform: capitalize !important;
 .sidebar-open .iq-sidebar {
     display: block !important;
     background-color: #fff !important;
+   transition: all 0.3s ease;
+   width: 80px !important;
+   
 }
 body.sidebar-main-menu.sidebar-main.sidebar-open
 {
-  margin-left: 60px !important;
-  margin-right: 60px !important;
+  margin-left: 80px !important;
+  margin-right: 80px !important;
+  
+}
+.sidebar-left a {
+    padding: 5px 0px 5px !important;
+}
+.iq-sidebar-menu .iq-menu li a i {
+    font-size: 18px !important;
+    width: 17px;
+    line-height: 13px;
+}
+.iq-sidebar-menu .iq-menu {
+    margin: 0 5px;
+
 }
 }
