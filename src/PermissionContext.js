@@ -10,9 +10,7 @@ export const PermissionProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    console.log("Permission Data:", permissionData);
 
-    if (!permissionData) {
       getAdminPermission()
         .then((response) => {
           if (response.Status) {
@@ -28,7 +26,7 @@ export const PermissionProvider = ({ children }) => {
         .catch((err) => {
           console.error("Error fetching admin permissions", err);
         });
-    }
+ 
   }, []);
 
   return (

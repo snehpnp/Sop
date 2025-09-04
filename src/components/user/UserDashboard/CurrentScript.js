@@ -2675,8 +2675,8 @@ const Coptyscript = ({
         { label: "Percentage", value: "Percentage" },
         { label: "Point", value: "Point" },
       ],
-      showWhen: () =>
-        showEditModal && EditDataScalping.PositionType !== "Multiple",
+      // showWhen: () =>
+      //   showEditModal && EditDataScalping.PositionType !== "Multiple",
       label_size: 12,
       headingtype: 4,
       col_size: 4,
